@@ -1,0 +1,6 @@
+#!/usr/bin/env sh
+
+set -e
+
+printf "===== Testing Ruby code\n"
+bundle exec rspec

@@ -1,0 +1,4 @@
+coverage/
+tmp/
+
+Gemfile.lock

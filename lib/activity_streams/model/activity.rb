@@ -1,0 +1,17 @@
+# frozen_string_literal: true
+
+module ActivityStreams
+  class Activity < ActivityStreams::Object
+    include Extensions::WebPayments::Security
+
+    %w[
+      actor
+      instrument
+      object origin
+      result
+      target
+    ].each(&method(:attribute))
+  end
+end
+
+Dir[File.join(__dir__, 'activity', '*.rb')].each { |f| require f }
