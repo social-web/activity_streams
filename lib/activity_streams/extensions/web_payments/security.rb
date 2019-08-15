@@ -4,7 +4,7 @@ module ActivityStreams
   module Extensions
     module WebPayments
       module Security
-        def self.included(base)
+        def self.extended(base)
           base.class_eval do
             context 'https://w3id.org/security/v1'
 

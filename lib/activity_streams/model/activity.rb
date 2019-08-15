@@ -2,8 +2,6 @@
 
 module ActivityStreams
   class Activity < ActivityStreams::Object
-    include Extensions::WebPayments::Security
-
     %w[
       actor
       instrument

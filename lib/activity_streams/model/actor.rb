@@ -3,7 +3,9 @@
 require_relative 'object'
 
 module ActivityStreams
-  class Actor < ActivityStreams::Object; end
+  class Actor < ActivityStreams::Object
+    extend Extensions::WebPayments::Security
+  end
 end
 
 Dir[File.join(__dir__, 'actor', '*.rb')].each { |f| require f }
