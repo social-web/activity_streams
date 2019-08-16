@@ -3,7 +3,7 @@
 module ActivityStreams
   module Extensions
     module Sensitive
-      def self.included(base)
+      def self.extended(base)
         base.class_eval do
           attribute :sensitive, :boolean
           validates :sensitive,

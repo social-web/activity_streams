@@ -6,7 +6,7 @@ module ActivityStreams
       'https://www.w3.org/ns/activitystreams', self
     )
 
-    def self.included(mod)
+    def self.extended(mod)
       mod.class_eval do
         attribute :'@context'
         alias_attribute :_context, :'@context'

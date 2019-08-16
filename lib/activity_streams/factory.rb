@@ -8,6 +8,7 @@ module ActivityStreams
 
     def build
       hash = JSON.parse(@json)
+      @context = hash['@context']
       obj = deep_initialize(hash)
       obj.original_json = @json
       obj
@@ -38,22 +39,24 @@ module ActivityStreams
       end
     end
 
-    def load_context(ctx, klass)
+    def load_context(ctx, obj)
       case ctx
-      when Array then ctx.each { |c| load_context(c, klass) }
-      when String then klass.include ActivityStreams::Model.contexts[ctx]
+      when Array then ctx.each { |c| load_context(c, obj) }
+      when String then
+        mod = ActivityStreams::Model.contexts[ctx]
+        mod ? obj.extend(mod) : obj.unsupported_contexts << ctx
       end
     end
 
     def transform_values(hash)
       klass = find_klass(hash['type'])
-      load_context(hash['@context'], klass)
 
       attrs = hash.transform_values { |v| deep_initialize(v) }
 
       unsupported_properties = unsupported_properties(klass, attrs)
 
       obj = klass.new(attrs)
+      load_context(@context, obj)
       obj.unsupported_properties = unsupported_properties
       obj
     end

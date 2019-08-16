@@ -57,8 +57,8 @@ module ActivityStreams
       json = %({ "@context": ["#{ctx1}", "#{ctx2}"], "type": "Create" })
 
       act = described_class.new(json).build
-      expect(act.class.ancestors).to include(mod1)
-      expect(act.class.ancestors).to include(mod2)
+      expect(act.singleton_class.ancestors).to include(mod1)
+      expect(act.singleton_class.ancestors).to include(mod2)
     end
   end
 end

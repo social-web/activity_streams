@@ -9,7 +9,7 @@ module ActivityStreams
           self
         )
 
-        def self.included(base)
+        def self.extended(base)
           base.class_eval do
             attribute :id
             attribute :owner
