@@ -12,7 +12,6 @@ module ActivityStreams
         alias_attribute :_context, :'@context'
         attribute :type, :string
 
-        # validate Validators::ContextValidator
         validates :type, inclusion: { in: ->(obj) { obj.class.name } }
       end
     end
