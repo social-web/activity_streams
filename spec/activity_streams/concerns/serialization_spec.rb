@@ -12,7 +12,7 @@ module ActivityStreams
       describe '#to_json' do
         it 'deep serializes to JSON' do
           json = File.read(
-            File.join(__dir__, '..', 'fixtures/extended_activity.json')
+            File.join(__dir__, '../../fixtures/extended_activity.json')
           )
 
           obj = ActivityStreams.from_json(json)

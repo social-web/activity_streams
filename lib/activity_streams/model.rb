@@ -9,20 +9,14 @@ module ActivityStreams
     include ActiveModel::Attributes
     include Concerns::Serialization
 
-    CONTEXT = 'https://www.w3.org/ns/activitystreams'
-
     attr_accessor :original_json
 
-    attribute :'@context'
-    alias_attribute :_context, :'@context'
-    attribute :type, :string
+    def self.contexts
+      @contexts ||= {}
+    end
 
-    validate Validators::ContextValidator
-    validates :type, inclusion: { in: ->(obj) { obj.class.name } }
-
-    def self.context(context)
-      @contexts ||= []
-      @contexts << context
+    def self.register_context(ctx, mod)
+      contexts[ctx] = mod
     end
   end
 end

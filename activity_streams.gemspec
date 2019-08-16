@@ -21,7 +21,6 @@ Gem::Specification.new do |s|
   s.required_ruby_version = '>= 1.9.2'
 
   s.add_dependency 'activemodel', '>= 5.2.3'
-  s.add_dependency 'roda', '>= 3.22.0'
 
   s.add_development_dependency 'bundler', '~> 2.0'
   s.add_development_dependency 'rack-test', '~> 1.0'

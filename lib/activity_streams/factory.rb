@@ -38,9 +38,18 @@ module ActivityStreams
       end
     end
 
+    def load_context(ctx, klass)
+      case ctx
+      when Array then ctx.each { |c| load_context(c, klass) }
+      when String then klass.include ActivityStreams::Model.contexts[ctx]
+      end
+    end
+
     def transform_values(hash)
-      attrs = hash.transform_values { |v| deep_initialize(v) }
       klass = find_klass(hash['type'])
+      load_context(hash['@context'], klass)
+
+      attrs = hash.transform_values { |v| deep_initialize(v) }
 
       unsupported_properties = unsupported_properties(klass, attrs)
 

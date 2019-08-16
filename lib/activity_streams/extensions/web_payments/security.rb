@@ -4,10 +4,13 @@ module ActivityStreams
   module Extensions
     module WebPayments
       module Security
-        def self.extended(base)
-          base.class_eval do
-            context 'https://w3id.org/security/v1'
+        ActivityStreams::Model.register_context(
+          'https://w3id.org/security/v1',
+          self
+        )
 
+        def self.included(base)
+          base.class_eval do
             attribute :id
             attribute :owner
             attribute :publicKey

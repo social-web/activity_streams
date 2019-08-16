@@ -6,7 +6,7 @@ module ActivityStreams
   RSpec.describe Factory do
     it 'deeply inits' do
       json = File.read(
-        File.join(__dir__, 'fixtures/extended_activity.json')
+        File.join(__dir__, '../fixtures/extended_activity.json')
       )
 
       collection = described_class.new(json).build
@@ -45,6 +45,20 @@ module ActivityStreams
 
       expect { described_class.new(json).build }.
         to raise_error(ActivityStreams::UnsupportedType, 'Nope')
+    end
+
+    it 'loads a context' do
+      ctx1 = 'https://example.com/ns'
+      mod1 = Module.new { ActivityStreams::Model.register_context(ctx1, self) }
+
+      ctx2 = 'https://example.org/ns'
+      mod2 = Module.new { ActivityStreams::Model.register_context(ctx2, self) }
+
+      json = %({ "@context": ["#{ctx1}", "#{ctx2}"], "type": "Create" })
+
+      act = described_class.new(json).build
+      expect(act.class.ancestors).to include(mod1)
+      expect(act.class.ancestors).to include(mod2)
     end
   end
 end
