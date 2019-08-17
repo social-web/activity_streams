@@ -3,11 +3,11 @@
 module ActivityStreams
   module Extensions
     module Sensitive
+      ActivityStreams.register_context('as:sensitive', self)
+
       def self.extended(base)
         base.class_eval do
-          attribute :sensitive, :boolean
-          validates :sensitive,
-            inclusion: { in: [true, false], allow_nil: true }
+          property :sensitive, Types::Params::Bool
         end
       end
     end
