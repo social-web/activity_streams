@@ -22,9 +22,9 @@ module ActivityStreams
       to
     ].each(&method(:property))
 
-    property :published, Types::Params::Time
-    property :startTime, Types::Params::Time
-    property :updated, Types::Params::Time
+    property :published, PropertyTypes::Params::Time
+    property :startTime, PropertyTypes::Params::Time
+    property :updated, PropertyTypes::Params::Time
   end
 end
 

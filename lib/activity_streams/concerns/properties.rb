@@ -12,7 +12,7 @@ module ActivityStreams
             @properties ||= {}
           end
 
-          def self.property(name, type = ::ActivityStreams::Types::Any)
+          def self.property(name, type = ::ActivityStreams::PropertyTypes::Any)
             if method_defined?(name) || singleton_methods.include?(name.to_sym)
               warn "Method \"#{name}\" already defined on #{self.class.name}. Called by #{caller[0]}"
               return

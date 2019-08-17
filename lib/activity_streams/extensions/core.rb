@@ -8,8 +8,8 @@ module ActivityStreams
 
     def self.extended(mod)
       mod.class_eval do
-        property :_context, Types::String
-        property :type, Types::String
+        property :_context, PropertyTypes::String
+        property :type, PropertyTypes::String
       end
     end
   end

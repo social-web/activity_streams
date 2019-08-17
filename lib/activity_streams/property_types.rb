@@ -3,7 +3,7 @@
 require 'dry-types'
 
 module ActivityStreams
-  module Types
+  module PropertyTypes
     class InvalidType < ActivityStreams::Error; end
 
     include Dry::Types()
