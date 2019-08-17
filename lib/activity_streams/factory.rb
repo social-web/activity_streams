@@ -8,11 +8,15 @@ module ActivityStreams
 
     def build
       hash = JSON.parse(@json)
+      raise ActivityStreams::Error unless hash['@context'] && hash['type']
+
       @context = hash.delete('@context')
       obj = deep_initialize(hash)
       obj._context = @context
       obj.original_json = @json
       obj
+    rescue JSON::ParserError => e
+      raise Error, e.message
     end
 
     private

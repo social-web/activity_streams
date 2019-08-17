@@ -2,4 +2,5 @@
 
 module ActivityStreams
   class Error < StandardError; end
+  class UnsupportedType < Error; end
 end
