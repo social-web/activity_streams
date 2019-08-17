@@ -2,17 +2,14 @@
 
 module ActivityStreams
   module Core
-    ActivityStreams::Model.register_context(
+    ActivityStreams.register_context(
       'https://www.w3.org/ns/activitystreams', self
     )
 
     def self.extended(mod)
       mod.class_eval do
-        attribute :'@context'
-        alias_attribute :_context, :'@context'
-        attribute :type, :string
-
-        validates :type, inclusion: { in: ->(obj) { obj.class.name } }
+        property :_context, Types::String
+        property :type, Types::String
       end
     end
   end

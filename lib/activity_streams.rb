@@ -1,8 +1,11 @@
 # frozen_string_literal: true
 
-require 'active_model'
+require 'bundler/setup'
+
 require 'json'
 
+require 'activity_streams/errors'
+require 'activity_streams/types'
 require 'activity_streams/model'
 require 'activity_streams/factory'
 

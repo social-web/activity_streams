@@ -4,7 +4,7 @@ require_relative 'object'
 
 module ActivityStreams
   class Collection < ActivityStreams::Object
-    %w[current first items last totalItems].each(&method(:attribute))
+    %i[current first items last totalItems].each(&method(:property))
   end
 end
 

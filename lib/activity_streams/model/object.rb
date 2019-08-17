@@ -2,7 +2,7 @@
 
 module ActivityStreams
   class Object < ActivityStreams::Model
-    %w[
+    %i[
       attachment attributedTo audience
       bcc bto
       cc content context
@@ -12,18 +12,18 @@ module ActivityStreams
       icon id image inReplyTo
       location
       mediaType
-      name
-      preview published
+      name nameMap
+      preview
       replies
-      startTime summary
+      summary
       tag
-      updated url
+      url
       to
-    ].each(&method(:attribute))
+    ].each(&method(:property))
 
-    attribute :published, :datetime
-    attribute :startTime, :datetime
-    attribute :updated, :datetime
+    property :published, Types::Params::Time
+    property :startTime, Types::Params::Time
+    property :updated, Types::Params::Time
   end
 end
 

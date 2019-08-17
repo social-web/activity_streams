@@ -2,6 +2,6 @@
 
 module ActivityStreams
   class Collection::CollectionPage < Collection
-    %w[next partOf prev].each(&method(:attribute))
+    %w[next partOf prev].each(&method(:property))
   end
 end

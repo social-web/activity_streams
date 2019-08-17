@@ -8,7 +8,7 @@ module ActivityStreams
       object origin
       result
       target
-    ].each(&method(:attribute))
+    ].each(&method(:property))
   end
 end
 

@@ -11,9 +11,9 @@ module ActivityStreams
 
       collection = described_class.new(json).build
       expect(collection.original_json).to eq(json)
-      expect(collection).to be_a(ActivityStreams::Collection)
+      expect(collection).to be_a (ActivityStreams::Collection)
       expect(collection.valid?).to eq(true)
-      expect(collection.send(:'@context')).
+      expect(collection._context).
         to eq('https://www.w3.org/ns/activitystreams')
       expect(collection._context).to eq('https://www.w3.org/ns/activitystreams')
       expect(collection.type).to eq('Collection')
@@ -49,12 +49,19 @@ module ActivityStreams
 
     it 'loads a context' do
       ctx1 = 'https://example.com/ns'
-      mod1 = Module.new { ActivityStreams::Model.register_context(ctx1, self) }
+      mod1 = Module.new { ActivityStreams.register_context(ctx1, self) }
 
       ctx2 = 'https://example.org/ns'
-      mod2 = Module.new { ActivityStreams::Model.register_context(ctx2, self) }
+      mod2 = Module.new { ActivityStreams.register_context(ctx2, self) }
 
-      json = %({ "@context": ["#{ctx1}", "#{ctx2}"], "type": "Create" })
+      json = %({
+        "@context": [
+          "https://www.w3.org/ns/activitystreams",
+          "#{ctx1}",
+          "#{ctx2}"
+          ],
+        "type": "Create"
+      })
 
       act = described_class.new(json).build
       expect(act.singleton_class.ancestors).to include(mod1)

@@ -8,8 +8,9 @@ module ActivityStreams
 
     def build
       hash = JSON.parse(@json)
-      @context = hash['@context']
+      @context = hash.delete('@context')
       obj = deep_initialize(hash)
+      obj._context = @context
       obj.original_json = @json
       obj
     end
@@ -34,7 +35,6 @@ module ActivityStreams
       when 'Note' then Object::Note
       when 'Image' then Object::Image
       when 'Person' then Actor::Person
-      when 'RsaSignature2017' then Extensions::LinkedDataSignature
       else raise UnsupportedType, type
       end
     end
@@ -43,8 +43,9 @@ module ActivityStreams
       case ctx
       when Array then ctx.each { |c| load_context(c, obj) }
       when String then
-        mod = ActivityStreams::Model.contexts[ctx]
-        mod ? obj.extend(mod) : obj.unsupported_contexts << ctx
+        mod = ActivityStreams.contexts[ctx]
+        mod ? obj.load_extension(mod) : obj.unsupported_contexts << ctx
+      when NilClass then raise TypeError
       end
     end
 
@@ -53,17 +54,17 @@ module ActivityStreams
 
       attrs = hash.transform_values { |v| deep_initialize(v) }
 
-      unsupported_properties = unsupported_properties(klass, attrs)
-
-      obj = klass.new(attrs)
+      obj = klass.new
       load_context(@context, obj)
-      obj.unsupported_properties = unsupported_properties
+      obj.properties = attrs
+
+      obj.unsupported_properties = unsupported_properties(klass, attrs)
       obj
     end
 
     def unsupported_properties(klass, attrs)
       attrs.each.with_object({}) do |(k, _v), unsupported_props|
-        if !klass.attribute_types.keys.include?(k)
+        if !klass.properties.keys.include?(k)
           unsupported_props[k] = attrs.delete(k)
         end
       end

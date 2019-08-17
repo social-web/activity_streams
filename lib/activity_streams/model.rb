@@ -4,19 +4,22 @@ Dir[File.join(__dir__, 'concerns', '*.rb')].each { |f| require f }
 Dir[File.join(__dir__, 'validators', '*.rb')].each { |f| require f }
 
 module ActivityStreams
+  def self.contexts
+    @contexts ||= {}
+  end
+
+  def self.register_context(ctx, mod)
+    contexts[ctx] = mod
+  end
+
   class Model
-    include ActiveModel::Model
-    include ActiveModel::Attributes
+    include Concerns::Properties
     include Concerns::Serialization
 
     attr_accessor :original_json
 
-    def self.contexts
-      @contexts ||= {}
-    end
-
-    def self.register_context(ctx, mod)
-      contexts[ctx] = mod
+    def load_extension(ext)
+      self.singleton_class.extend(ext)
     end
   end
 end

@@ -3,20 +3,24 @@
 module ActivityStreams
   module Concerns
     module Serialization
-      attr_accessor :unsupported_context
-      attr_accessor :unsupported_properties
+      def unsupported_properties
+        @unsupported_properties ||= {}
+      end
+
+      def unsupported_properties=(v)
+        @unsupported_properties = v
+      end
 
       def to_json(*args)
         JSON.dump(to_h)
       end
 
       def to_h
-        attrs = attributes.dup
-        if unsupported_properties
-          attrs.merge!(unsupported_properties)
-        end
-        attrs = self.is_a?(ActivityStreams::Activity::Update) ? attrs : attrs.compact
-        attrs.transform_values do |v|
+        props = properties.dup
+        props.merge!( '@context' => _context ) if _context
+        props.merge!(unsupported_properties) unless unsupported_properties.empty?
+        props = self.is_a?(ActivityStreams::Activity::Update) ? props : props.compact
+        props.transform_values do |v|
           case v
           when ActivityStreams::Model then v.to_h
           when Date, Time then v.iso8601
