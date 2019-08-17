@@ -3,12 +3,12 @@
 module ActivityStreams
   module Concerns
     module Serialization
-      def unsupported_properties
-        @unsupported_properties ||= {}
+      def _unsupported_properties
+        @_unsupported_properties ||= {}
       end
 
-      def unsupported_properties=(v)
-        @unsupported_properties = v
+      def _unsupported_properties=(v)
+        @_unsupported_properties = v
       end
 
       def to_json(*args)
@@ -18,7 +18,7 @@ module ActivityStreams
       def to_h
         props = properties.dup
         props.merge!( '@context' => _context ) if _context
-        props.merge!(unsupported_properties) unless unsupported_properties.empty?
+        props.merge!(_unsupported_properties) unless _unsupported_properties.empty?
         props = self.is_a?(ActivityStreams::Activity::Update) ? props : props.compact
         props.transform_values do |v|
           case v

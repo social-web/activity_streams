@@ -1,8 +1,11 @@
 # frozen_string_literal: true
 
 module ActivityStreams
+  class NoPropertyError < ActivityStreams::Error; end
+
   module Concerns
     module Properties
+
       def self.included(base)
         base.class_eval do
           def self.properties
@@ -30,13 +33,26 @@ module ActivityStreams
         @errors ||= []
       end
 
+      def method_missing(m, *args, &block)
+        raise NoPropertyError,
+          "The propery '#{m}' is not available on #{self.class}. " \
+            "ActivityStream objects can be extended to support additional "
+            "properties."
+      end
+
       def properties
         @properties ||= {}
       end
 
       def properties=(props)
         props.each do |k, v|
-          public_send("#{k}=", v)
+          setter = "#{k}="
+
+          # Don't stop processing if we don't recognize the attr
+          # https://www.w3.org/TR/2017/REC-activitystreams-core-20170523/#extensibility
+          next unless respond_to?(setter)
+
+          public_send(setter, v)
           properties.merge!(k.to_sym => v)
         end
       end

@@ -12,6 +12,8 @@ module ActivityStreams
 
       @context = hash.delete('@context')
       obj = deep_initialize(hash)
+      raise ActivityStreams::UnsupportedType.new(@json) if obj.nil?
+
       obj._context = @context
       obj.original_json = @json
       obj
@@ -39,22 +41,23 @@ module ActivityStreams
       when 'Note' then Object::Note
       when 'Image' then Object::Image
       when 'Person' then Actor::Person
-      else raise UnsupportedType, type
       end
     end
 
     def load_context(ctx, obj)
       case ctx
       when Array then ctx.each { |c| load_context(c, obj) }
+      when Hash then ctx.each_value { |c| load_context(c, obj) }
       when String then
         mod = ActivityStreams.contexts[ctx]
-        mod ? obj.load_extension(mod) : obj.unsupported_contexts << ctx
+        obj.load_extension(mod) if mod
       when NilClass then raise TypeError
       end
     end
 
     def transform_values(hash)
       klass = find_klass(hash['type'])
+      return if klass.nil?
 
       attrs = hash.transform_values { |v| deep_initialize(v) }
 
@@ -62,7 +65,7 @@ module ActivityStreams
       load_context(@context, obj)
       obj.properties = attrs
 
-      obj.unsupported_properties = unsupported_properties(klass, attrs)
+      obj._unsupported_properties = unsupported_properties(klass, attrs)
       obj
     end
 

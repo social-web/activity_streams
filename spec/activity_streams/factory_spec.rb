@@ -35,7 +35,7 @@ module ActivityStreams
       expect(target).to be_a(ActivityStreams::Collection)
     end
 
-    it 'raise an error when it recieves an unsupported type' do
+    it 'does not raise an error when it receives an unsupported type' do
       json = <<~JSON
         {
           "@context": "https://www.w3.org/ns/activitystreams",
@@ -44,7 +44,7 @@ module ActivityStreams
       JSON
 
       expect { described_class.new(json).build }.
-        to raise_error(ActivityStreams::UnsupportedType, 'Nope')
+        to raise_error(ActivityStreams::UnsupportedType)
     end
 
     it 'loads a context' do
