@@ -2,6 +2,7 @@
 
 module ActivityStreams
   class Link < ActivityStreams::Model
+    ActivityStreams.register_type('Link', self)
     %i[
       href
       rel

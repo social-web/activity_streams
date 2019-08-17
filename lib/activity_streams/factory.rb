@@ -56,7 +56,7 @@ module ActivityStreams
     end
 
     def transform_values(hash)
-      klass = find_klass(hash['type'])
+      klass = ActivityStreams.types[hash['type']]
       return if klass.nil?
 
       attrs = hash.transform_values { |v| deep_initialize(v) }

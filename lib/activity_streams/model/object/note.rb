@@ -38,6 +38,6 @@ module ActivityStreams
   #   }
   # }
   class Object::Note < Object
-    include ActivityStreams::Extensions::Sensitive
+    ActivityStreams.register_type('Note', self)
   end
 end

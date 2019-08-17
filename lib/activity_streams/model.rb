@@ -12,6 +12,14 @@ module ActivityStreams
     contexts[ctx] = mod
   end
 
+  def self.types
+    @types ||= {}
+  end
+
+  def self.register_type(type, klass)
+    types[type.to_s] = klass
+  end
+
   class Model
     include Concerns::Properties
     include Concerns::Serialization

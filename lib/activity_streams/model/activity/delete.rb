@@ -2,6 +2,7 @@
 
 module ActivityStreams
   class Activity::Delete < Activity
+    ActivityStreams.register_type('Delete', self)
     # {
     #   "@context": [
     #     "https://www.w3.org/ns/activitystreams",

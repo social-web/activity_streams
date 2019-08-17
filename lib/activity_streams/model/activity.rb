@@ -2,6 +2,8 @@
 
 module ActivityStreams
   class Activity < ActivityStreams::Object
+    ActivityStreams.register_type('Activity', self)
+
     %w[
       actor
       instrument

@@ -71,5 +71,7 @@ module ActivityStreams
   #     "signatureValue": "Y6wqiUgqm/ykzKw/jCtsB5fQciGq9TMILNt57FanVg5N8UfLg4vG7Z9Xg6jIAMb++UzyDCW2oc3k9OzD/w0iCSsbMG3Mi+0OdVXNEK7DarDMWJHLgOTaUMW7C/hY8Z+OlhbSu+VvhRVuFUETgTxCDxnGSydZyFL8PTjNQ52hbEbkDqKyS+SwyQqr4T4niM5c631cwlVfX8cwSPWKdNjEpQGyqSp4nqxfw//Mtz4n6eK4X0FcZVoGA8ZddZXViZB/xw0SZfxj+ctKqz2BHRtn7f3MNMlkIBdhuqbIy46DfTODQFnnbHsuLykR8uXL7d1nf27sEdczxzcWRgnK8dG+aQ=="
   #   }
   # }
-  class Activity::Create < Activity; end
+  class Activity::Create < Activity
+    ActivityStreams.register_type('Create', self)
+  end
 end
