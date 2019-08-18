@@ -10,7 +10,7 @@ module ActivityStreams
       duration
       endTime
       generator
-      icon id image inReplyTo
+      icon image inReplyTo
       location
       mediaType
       name nameMap

@@ -4,7 +4,7 @@ module ActivityStreams
   class Activity < ActivityStreams::Object
     ActivityStreams.register_type('Activity', self)
 
-    %w[
+    %i[
       actor
       instrument
       object origin

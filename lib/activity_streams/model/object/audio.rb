@@ -3,7 +3,7 @@
 require 'activity_streams/model/object/document'
 
 module ActivityStreams
-  class Object::Image < Object::Document
-    ActivityStreams.register_type('Image', self)
+  class Object::Audio < Object::Document
+    ActivityStreams.register_type('Audio', self)
   end
 end
