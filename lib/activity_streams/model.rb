@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+
 Dir[File.join(__dir__, 'concerns', '*.rb')].each { |f| require f }
 Dir[File.join(__dir__, 'validators', '*.rb')].each { |f| require f }
 
@@ -21,8 +22,11 @@ module ActivityStreams
   end
 
   class Model
+    require 'activity_streams/core'
+
     include Concerns::Properties
     include Concerns::Serialization
+    extend ActivityStreams::Core
 
     attr_accessor :original_json
 

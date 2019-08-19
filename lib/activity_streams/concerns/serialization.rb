@@ -17,15 +17,20 @@ module ActivityStreams
 
       def to_h
         props = properties.dup
-        props.merge!( '@context' => _context ) if _context
+        props.merge!( '@context' => props.delete(:_context) ) if _context
         props.merge!(_unsupported_properties) unless _unsupported_properties.empty?
         props = self.is_a?(ActivityStreams::Activity::Update) ? props : props.compact
-        props.transform_values do |v|
-          case v
-          when ActivityStreams::Model then v.to_h
-          when Date, Time then v.iso8601
-          else v
-          end
+        props.transform_values { |v| transform_values(v) }
+      end
+
+      private
+
+      def transform_values(v)
+        case v
+        when ActivityStreams::Model then v.to_h
+        when Array then v.map(&method(:transform_values))
+        when Date, Time then v.iso8601
+        else v
         end
       end
     end

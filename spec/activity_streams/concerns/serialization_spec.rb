@@ -5,10 +5,6 @@ require 'spec_helper'
 module ActivityStreams
   module Concerns
     RSpec.describe Serialization do
-      let(:model) {
-        Class.new { include Serialization }
-      }
-
       describe '#to_json' do
         it 'deep serializes to JSON' do
           json = File.read(

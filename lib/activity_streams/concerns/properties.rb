@@ -9,18 +9,24 @@ module ActivityStreams
       def self.included(base)
         base.class_eval do
           def self.properties
-            @properties ||= {}
+            types.keys
+          end
+
+          def self.types
+            @types ||= self.ancestors[1..].
+                select { |anc| anc.respond_to?(:types) }.
+                each.with_object({}) { |anc, t| t.merge!(anc.types) }
           end
 
           def self.property(name, type = ::ActivityStreams::PropertyTypes::Any)
-            if method_defined?(name) || singleton_methods.include?(name.to_sym)
-              warn "Method \"#{name}\" already defined on #{self.class.name}. Called by #{caller[0]}"
-              return
-            end
+            name = name.to_sym
+            return if method_defined?(name) || singleton_methods.include?(name)
 
+            types.merge!(name => type)
             def_method = self.is_a?(Class) ? :define_method : :define_singleton_method
             define_method(name) { instance_variable_get("@#{name}") }
             define_method("#{name}=") do |v|
+              properties[name] = v
               instance_variable_set("@#{name}", type[v])
             rescue Dry::Types::ConstraintError => e
               errors << e.message
@@ -35,9 +41,7 @@ module ActivityStreams
 
       def method_missing(m, *args, &block)
         raise NoPropertyError,
-          "The propery '#{m}' is not available on #{self.class}. " \
-            "ActivityStream objects can be extended to support additional "
-            "properties."
+          "The propery '#{m}' is not available on #{self.class}."
       end
 
       def properties
@@ -57,7 +61,12 @@ module ActivityStreams
         end
       end
 
+      def types
+        self.class.types
+      end
+
       def valid?
+        properties.each { |k, v| check_type(v, types[k]) }
         errors.none?
       end
 
