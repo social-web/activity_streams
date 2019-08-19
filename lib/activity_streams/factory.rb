@@ -71,7 +71,7 @@ module ActivityStreams
 
     def unsupported_properties(klass, attrs)
       attrs.each.with_object({}) do |(k, _v), unsupported_props|
-        if !klass.properties.include?(k)
+        if !klass.properties.include?(k.to_sym)
           unsupported_props[k] = attrs.delete(k)
         end
       end
