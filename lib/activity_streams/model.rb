@@ -30,6 +30,10 @@ module ActivityStreams
 
     attr_accessor :original_json
 
+    def initialize(**props)
+      props.each { |k, v| public_send("#{k}=", v) }
+    end
+
     def load_extension(ext)
       self.singleton_class.extend(ext)
     end

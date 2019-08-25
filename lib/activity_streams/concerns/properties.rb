@@ -5,7 +5,6 @@ module ActivityStreams
 
   module Concerns
     module Properties
-
       def self.included(base)
         base.class_eval do
           def self.properties
