@@ -28,7 +28,7 @@ module ActivityStreams
     include Concerns::Serialization
     extend ActivityStreams::Core
 
-    attr_accessor :original_json
+    attr_accessor :_original_json
     attr_accessor :_parent
 
     def initialize(**props)

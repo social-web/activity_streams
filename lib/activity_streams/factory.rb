@@ -15,7 +15,7 @@ module ActivityStreams
       raise ActivityStreams::UnsupportedType.new(@json) if obj.nil?
 
       obj._context = @context
-      obj.original_json = @json
+      obj._original_json = @json
       obj
     rescue JSON::ParserError => e
       raise Error, e.message

@@ -10,7 +10,7 @@ module ActivityStreams
       )
 
       collection = described_class.new(json).build
-      expect(collection.original_json).to eq(json)
+      expect(collection._original_json).to eq(json)
       expect(collection).to be_a (ActivityStreams::Collection)
       expect(collection.valid?).to eq(true)
       expect(collection._context).
