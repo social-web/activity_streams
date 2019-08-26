@@ -16,6 +16,12 @@ module ActivityStreams
         expect { activity.properties = { beep: 'boop' } }.not_to raise_error
         expect { activity.beep }.to raise_error(ActivityStreams::NoPropertyError)
       end
+
+      it 'sets the parent' do
+        activity.class.property :beep
+        activity.beep = ActivityStreams::Model.new
+        expect(activity.beep._parent).to eq(activity)
+      end
     end
   end
 end

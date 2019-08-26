@@ -36,6 +36,7 @@ module ActivityStreams
 
             # Define setter
             define_method("#{name}=") do |v|
+              v._parent = self if v.is_a?(ActivityStreams::Model)
               properties[name] = v
               instance_variable_set("@#{name}", type[v])
             rescue Dry::Types::ConstraintError => e

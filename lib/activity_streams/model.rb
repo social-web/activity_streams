@@ -29,6 +29,7 @@ module ActivityStreams
     extend ActivityStreams::Core
 
     attr_accessor :original_json
+    attr_accessor :_parent
 
     def initialize(**props)
       props.each { |k, v| public_send("#{k}=", v) }
