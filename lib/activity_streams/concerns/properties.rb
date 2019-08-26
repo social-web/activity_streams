@@ -8,20 +8,16 @@ module ActivityStreams
       def self.included(base)
         base.class_eval do
           def self.properties
-            types.keys
-          end
-
-          def self.types
-            @types ||= self.ancestors[1..].
-                select { |anc| anc.respond_to?(:types) }.
-                each.with_object({}) { |anc, t| t.merge!(anc.types) }
+            @properties ||= self.ancestors[1..].
+                select { |anc| anc.respond_to?(:properties) }.
+                each.with_object({}) { |anc, t| t.merge!(anc.properties) }
           end
 
           def self.property(name, type = ::ActivityStreams::PropertyTypes::Any)
             name = name.to_sym
             return if method_defined?(name) || singleton_methods.include?(name)
 
-            types.merge!(name => type)
+            properties.merge!(name => type)
 
             # If called on a class, we want the property to be available on all
             # instances of the class. If called on a singleton class, we want
@@ -72,12 +68,8 @@ module ActivityStreams
         end
       end
 
-      def types
-        self.class.types
-      end
-
       def valid?
-        properties.each { |k, v| check_type(v, types[k]) }
+        properties.each { |k, v| check_type(v, self.class.properties[k]) }
         errors.none?
       end
 
