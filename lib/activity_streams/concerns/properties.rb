@@ -22,8 +22,19 @@ module ActivityStreams
             return if method_defined?(name) || singleton_methods.include?(name)
 
             types.merge!(name => type)
-            def_method = self.is_a?(Class) ? :define_method : :define_singleton_method
+
+            # If called on a class, we want the property to be available on all
+            # instances of the class. If called on a singleton class, we want
+            # the property to be available only on the particular instance. This
+            # avoids polluting objects with unnecessary context.
+            def_method = self.is_a?(Class) ?
+              :define_method :
+              :define_singleton_method
+
+            # Define getter
             define_method(name) { instance_variable_get("@#{name}") }
+
+            # Define setter
             define_method("#{name}=") do |v|
               properties[name] = v
               instance_variable_set("@#{name}", type[v])
