@@ -31,19 +31,6 @@ module ActivityStreams
       end
     end
 
-    def find_klass(type)
-      case type
-      when 'Add' then Activity::Add
-      when 'Collection' then Collection
-      when 'CollectionPage' then Collection::CollectionPage
-      when 'Create' then Activity::Create
-      when 'Link' then Link
-      when 'Note' then Object::Note
-      when 'Image' then Object::Image
-      when 'Person' then Actor::Person
-      end
-    end
-
     def load_context(ctx, obj)
       case ctx
       when Array then ctx.each { |c| load_context(c, obj) }
