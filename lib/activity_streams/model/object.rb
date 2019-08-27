@@ -2,7 +2,7 @@
 
 module ActivityStreams
   class Object < ActivityStreams::Model
-    ActivityStreams.register_type('Link', self)
+    ActivityStreams.register_type('Object', self)
     %i[
       attachment attributedTo audience
       bcc bto

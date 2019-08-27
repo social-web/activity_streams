@@ -33,6 +33,7 @@ module ActivityStreams
 
     def initialize(**props)
       self._context = 'https://www.w3.org/ns/activitystreams'
+      self.type = ActivityStreams.types.invert[self.class]
       props.each { |k, v| public_send("#{k}=", v) }
     end
 
