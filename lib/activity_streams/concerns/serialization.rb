@@ -17,7 +17,7 @@ module ActivityStreams
 
       def to_h
         props = properties.dup
-        props.merge!( '@context' => props.delete(:_context) ) if _context
+        props.merge!( '@context' => props.delete(:_context) ) if @context
         props.merge!(_unsupported_properties) unless _unsupported_properties.empty?
         props = self.is_a?(ActivityStreams::Activity::Update) ? props : props.compact
         props.transform_values { |v| transform_values(v) }

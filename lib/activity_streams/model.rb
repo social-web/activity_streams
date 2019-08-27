@@ -32,7 +32,23 @@ module ActivityStreams
     attr_accessor :_parent
 
     def initialize(**props)
+      self._context = 'https://www.w3.org/ns/activitystreams'
       props.each { |k, v| public_send("#{k}=", v) }
+    end
+
+    def _context
+      _parent&._context || @context
+    end
+
+    def _context=(ctx)
+      properties[:_context] = @context = ctx unless _parent
+    end
+
+    def _parent=(v)
+      self.instance_eval('undef :_context=') if respond_to?(:_context=)
+      remove_instance_variable(:@context) if @context
+      properties.delete(:_context)
+      @_parent = v
     end
 
     def load_extension(ext)

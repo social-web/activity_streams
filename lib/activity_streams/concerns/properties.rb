@@ -19,14 +19,6 @@ module ActivityStreams
 
             properties.merge!(name => type)
 
-            # If called on a class, we want the property to be available on all
-            # instances of the class. If called on a singleton class, we want
-            # the property to be available only on the particular instance. This
-            # avoids polluting objects with unnecessary context.
-            def_method = self.is_a?(Class) ?
-              :define_method :
-              :define_singleton_method
-
             # Define getter
             define_method(name) { instance_variable_get("@#{name}") }
 
@@ -48,7 +40,7 @@ module ActivityStreams
 
       def method_missing(m, *args, &block)
         raise NoPropertyError,
-          "The propery '#{m}' is not available on #{self.class}."
+          "The propery '#{m}' is not available on #{self}."
       end
 
       def properties

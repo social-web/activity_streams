@@ -4,6 +4,7 @@ module ActivityStreams
   class Factory
     def initialize(json)
       @json = json.dup.freeze
+
     end
 
     def build
@@ -23,10 +24,10 @@ module ActivityStreams
 
     private
 
-    def deep_initialize(object)
+    def deep_initialize(object, parent = nil)
       case object
-      when Hash then object['type'] ? transform_values(object) : object
-      when Array then object.map { |o| deep_initialize(o) }
+      when Hash then object['type'] ? transform_values(object, parent) : object
+      when Array then object.map { |o| deep_initialize(o, parent) }
       else object
       end
     end
@@ -42,24 +43,25 @@ module ActivityStreams
       end
     end
 
-    def transform_values(hash)
+    def transform_values(hash, parent = nil)
       klass = ActivityStreams.types[hash['type']]
       return if klass.nil?
 
-      attrs = hash.transform_values { |v| deep_initialize(v) }
-
       obj = klass.new
-      load_context(@context, obj)
-      obj.properties = attrs
+      props = hash.transform_values { |v| deep_initialize(v, obj) }
 
-      obj._unsupported_properties = unsupported_properties(klass, attrs)
+      load_context(@context, obj)
+      obj.properties = props
+      obj._parent = parent if parent
+
+      obj._unsupported_properties = unsupported_properties(klass, props)
       obj
     end
 
-    def unsupported_properties(klass, attrs)
-      attrs.each.with_object({}) do |(k, _v), unsupported_props|
+    def unsupported_properties(klass, props)
+      props.each.with_object({}) do |(k, _v), unsupported_props|
         if !klass.properties.include?(k.to_sym)
-          unsupported_props[k] = attrs.delete(k)
+          unsupported_props[k] = props.delete(k)
         end
       end
     end
