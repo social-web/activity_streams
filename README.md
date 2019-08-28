@@ -57,7 +57,7 @@ activity_stream.object.id = 'https://example.com/note/1'
 
 ## Extensions
 
-ActivityStreams are (extensible)[https://www.w3.org/TR/activitystreams-core/#extensibility]
+ActivityStreams are [extensible](https://www.w3.org/TR/activitystreams-core/#extensibility)
 via additional `@context`s. You can register a context and provide modules to
 extend models. 
 
