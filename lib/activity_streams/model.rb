@@ -37,6 +37,14 @@ module ActivityStreams
       props.each { |k, v| public_send("#{k}=", v) }
     end
 
+    def ==(obj)
+      case obj
+      when ActivityStreams::Model then obj.id == id
+      when Hash then [obj['id'], obj[:id]].include?(id)
+      else false
+      end
+    end
+
     def _context
       _parent&._context || @context
     end
