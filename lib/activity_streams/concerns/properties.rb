@@ -24,7 +24,16 @@ module ActivityStreams
 
             # Define setter
             define_method("#{name}=") do |v|
-              v._parent = self if v.is_a?(ActivityStreams::Model)
+              case v
+              when ActivityStreams::Model then v._parent = self
+              when Array
+                v = v.map { |child|
+                  if child.is_a?(ActivityStreams::Model)
+                    child._parent = self
+                  end
+                  child
+                }
+              end
 
               if IRI::IsResolveable.call(name, v) && ActivityStreams.internet.on?
                 v = IRI::Resolve.call(v)
