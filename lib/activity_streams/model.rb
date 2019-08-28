@@ -57,6 +57,7 @@ module ActivityStreams
       self.instance_eval('undef :_context=') if respond_to?(:_context=)
       remove_instance_variable(:@context) if @context
       properties.delete(:_context)
+      _unsupported_properties.delete('@context')
       @_parent = v
     end
 
