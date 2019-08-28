@@ -3,7 +3,7 @@
 :warning: Development is in the **alpha** phase. Changes large and small are
 expected. Feedback is very welcome.
 
-This library provides Ruby models to represent (Activity Streams)[https://www.w3.org/TR/activitystreams-core/].
+This library provides Ruby models to represent [Activity Streams](https://www.w3.org/TR/activitystreams-core/).
 It will load properties according to the given `@context`, provides an API for 
 extending additional `@context`s, and can resolve IRIs automatically.
 
@@ -92,7 +92,7 @@ activity_stream.my_prop # => 'My prop'
 
 ## Resolve IRIs
 
-ActivityStreams will resolve IRIs by turning its internet connection on.
+ActivityStreams will resolve IRIs when its internet connection is turned on.
 
 ```ruby
 ActivityStreams.internet.off? # => true
