@@ -12,6 +12,8 @@ require 'activity_streams/factory'
 require 'activity_streams/internet'
 
 module ActivityStreams
+  NAMESPACE = 'https://www.w3.org/ns/activitystreams'
+
   class << self
     def from_json(json)
       Factory.new(json).build
