@@ -9,7 +9,7 @@ module ActivityStreams
     def self.extended(mod)
       mod.class_eval do
         property :_context, PropertyTypes::String
-        property :id, PropertyTypes::String.constrained(format: URI.regexp(%w[http https]))
+        property :id, PropertyTypes::String.constrained(format: ::URI.regexp(%w[http https]))
         property :type, PropertyTypes::String
       end
     end

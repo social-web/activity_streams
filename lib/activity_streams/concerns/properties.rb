@@ -25,6 +25,10 @@ module ActivityStreams
             # Define setter
             define_method("#{name}=") do |v|
               v._parent = self if v.is_a?(ActivityStreams::Model)
+
+              if IRI::IsResolveable.call(name, v) && ActivityStreams.internet.on?
+                v = IRI::Resolve.call(v)
+              end
               properties[name] = v
               instance_variable_set("@#{name}", type[v])
             rescue Dry::Types::ConstraintError => e

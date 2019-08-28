@@ -21,6 +21,7 @@ Gem::Specification.new do |s|
   s.required_ruby_version = '>= 1.9.2'
 
   s.add_dependency 'dry-types', '~> 1.0'
+  s.add_dependency 'http'
 
   s.add_development_dependency 'bundler', '~> 2.0'
   s.add_development_dependency 'rack-test', '~> 1.0'
