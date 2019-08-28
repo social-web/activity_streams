@@ -4,7 +4,6 @@ module ActivityStreams
   class Factory
     def initialize(json)
       @json = json.dup.freeze
-
     end
 
     def build
