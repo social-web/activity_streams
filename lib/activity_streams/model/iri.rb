@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 
 module ActivityStreams
+  def self.from_uri(uri)
+    IRI::Resolve.call(uri)
+  end
+
   class IRI
     DEFAULT_HEADERS = {
       'accept': 'application/ld+json; ' \
