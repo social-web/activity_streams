@@ -12,8 +12,13 @@ module ActivityStreams
       @on = false
     end
 
-    def off
+    def off &blk
+      current = @on
       @on = false
+      if blk
+        yield
+        @on = current
+      end
     end
 
     def off?
@@ -24,8 +29,13 @@ module ActivityStreams
       !!@on
     end
 
-    def on
+    def on &blk
+      current = @on
       @on = true
+      if blk
+        yield
+        @on = current
+      end
     end
   end
 end
