@@ -2,10 +2,12 @@
 
 module ActivityStreams
   def self.from_uri(uri)
-    IRI::Resolve.call(uri)
+    IRI::Dereference.call(uri)
   end
 
   class IRI
+    class IRIDereferencingError < ActivityStreams::Error; end
+
     DEFAULT_HEADERS = {
       'accept': 'application/ld+json; ' \
         'profile="https://www.w3.org/ns/activitystreams", '\
@@ -20,9 +22,17 @@ module ActivityStreams
         value.match?(::URI.regexp(%w[http https]))
     }
 
-    Resolve = ->(iri) {
-      res = HTTP.follow.headers(DEFAULT_HEADERS).get(iri)
-      if res.status.success? && res.headers['content-type'].match?(/json/)
+    Dereference = ->(iri) {
+      res = HTTP.headers(DEFAULT_HEADERS).get(iri)
+
+      unless res.headers['content-type'].match?(/json/)
+        raise IRIDereferencingError.new "Unable to dereference \"#{iri}\". " \
+          "Invalid content-type: #{res.headers['content-type']}"
+        MSG
+      end
+
+      case res.status
+      when 200..299 then
         body = res.body.to_s.encode(
           'UTF-8',
           'UTF-8',
@@ -30,8 +40,12 @@ module ActivityStreams
           replace: ''
         )
         ActivityStreams.from_json(body)
-      else
-        iri
+      when 300..399 then IRI::Dereference.call(res.headers['Location'])
+      when 400..499
+        raise IRIDereferencingError.new <<~MSG
+          Unable to dereference "#{iri}". Received status: #{res.status}.
+        MSG
+      when 500..599 then # retry?
       end
     }
   end

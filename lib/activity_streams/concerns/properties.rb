@@ -50,7 +50,7 @@ module ActivityStreams
               end
 
               if IRI::IsResolveable.call(name, v) && ActivityStreams.internet.on?
-                v = IRI::Resolve.call(v)
+                v = IRI::Dereference.call(v)
               end
               properties[name] = v
               instance_variable_set("@#{name}", type[v])

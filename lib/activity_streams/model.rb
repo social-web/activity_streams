@@ -38,7 +38,7 @@ module ActivityStreams
       when Hash then a.each { |k, v| public_send("#{k}=", v) }
       when String
         if a.match?(::URI.regexp(%w[http https]))
-          IRI::Resolve.call(a)
+          IRI::Dereference.call(a)
         end
       end
     end
