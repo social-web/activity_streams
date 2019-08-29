@@ -22,6 +22,8 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'dry-types', '~> 1.0'
   s.add_dependency 'http'
+  s.add_dependency 'concurrent-ruby'
+  s.add_dependency 'concurrent-ruby-edge'
 
   s.add_development_dependency 'bundler', '~> 2.0'
   s.add_development_dependency 'rack-test', '~> 1.0'

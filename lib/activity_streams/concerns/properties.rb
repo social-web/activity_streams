@@ -1,5 +1,19 @@
 # frozen_string_literal: true
 
+# require 'concurrent'
+# require 'concurrent/edge/promises'
+# require 'concurrent/edge/channel'
+# require 'concurrent/edge/erlang_actor'
+#
+# class HTTPClient < Concurrent::Actor::Context
+#   # override on_message to define actor's behaviour
+#   def on_message(message)
+#     if Integer === message
+#       @count += message
+#     end
+#   end
+# end #
+
 module ActivityStreams
   class NoPropertyError < ActivityStreams::Error; end
 

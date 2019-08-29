@@ -31,10 +31,16 @@ module ActivityStreams
     attr_accessor :_original_json
     attr_accessor :_parent
 
-    def initialize(**props)
+    def initialize(*a)
       self._context = 'https://www.w3.org/ns/activitystreams'
       self.type = ActivityStreams.types.invert[self.class]
-      props.each { |k, v| public_send("#{k}=", v) }
+      case a
+      when Hash then a.each { |k, v| public_send("#{k}=", v) }
+      when String
+        if a.match?(::URI.regexp(%w[http https]))
+          IRI::Resolve.call(a)
+        end
+      end
     end
 
     def ==(obj)

@@ -5,6 +5,7 @@ require 'bundler/setup'
 require 'http'
 require 'json'
 
+require 'activity_streams/configuration'
 require 'activity_streams/errors'
 require 'activity_streams/property_types'
 require 'activity_streams/model'

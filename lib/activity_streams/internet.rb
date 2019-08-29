@@ -30,14 +30,34 @@ module ActivityStreams
       !!@on
     end
 
-    def on &blk
+    def on(domain: nil, &blk)
+      unless ActivityStreams.config.domain || domain
+        warn <<~WARN.strip
+          WARN: Turning on ActivityStreams access to the internet without a 
+          domain configured risks an endless loop of requests to the domain that 
+          ActivityStreams is loaded on. 
+
+          Call `ActivityStreams.internet.on(domain: "example.com", &blk)` or use 
+          `ActivityStreams.config.domain = "example.com"`
+        WARN
+      end
+
       current = @on
       @on = true
+
       if blk
+        current_domain = ActivityStreams.config.domain
+        ActivityStreams.config.domain = domain if domain
+
         result = yield
+
         @on = current
-        result
+        ActivityStreams.config.domain = current_domain
+
+        return result
       end
+
+      @on
     end
   end
 end
