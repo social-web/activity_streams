@@ -16,8 +16,9 @@ module ActivityStreams
       current = @on
       @on = false
       if blk
-        yield
+        result = yield
         @on = current
+        result
       end
     end
 
@@ -33,8 +34,9 @@ module ActivityStreams
       current = @on
       @on = true
       if blk
-        yield
+        result = yield
         @on = current
+        result
       end
     end
   end

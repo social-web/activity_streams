@@ -24,6 +24,13 @@ module ActivityStreams
           end
         }.not_to change { internet.on? }
       end
+
+      it 'returns the block result' do
+        result = internet.off do
+          'result'
+        end
+        expect(result).to eq('result')
+      end
     end
 
     describe '#on' do
@@ -41,6 +48,13 @@ module ActivityStreams
             expect(internet.on?).to eq(true)
           end
         }.not_to change { internet.off? }
+      end
+
+      it 'returns the block result' do
+        result = internet.on do
+          'result'
+        end
+        expect(result).to eq('result')
       end
     end
   end
