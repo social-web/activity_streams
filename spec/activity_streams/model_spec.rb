@@ -53,6 +53,18 @@ module ActivityStreams
       end
     end
 
+    describe '#is_a?' do
+      it 'compares types' do
+        follow = ActivityStreams::Object.new(type: 'Follow')
+        create_klass = ActivityStreams::Activity::Create
+
+        expect(follow.class).not_to eq(create_klass)
+        expect(follow.is_a?(create_klass)).to eq(false)
+
+        expect(follow.is_a?(ActivityStreams::Activity::Follow)).to eq(true)
+      end
+    end
+
     describe '#==' do
       it 'is equal to a model by id' do
         id = 'https://example.com/1'

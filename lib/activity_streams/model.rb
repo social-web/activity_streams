@@ -110,6 +110,11 @@ module ActivityStreams
       @id ||= v.freeze
     end
 
+    def is_a?(klass)
+      their_type = ActivityStreams.types.invert[klass]
+      type == their_type
+    end
+
     def load_extension(ext)
       self.singleton_class.extend(ext)
     end
