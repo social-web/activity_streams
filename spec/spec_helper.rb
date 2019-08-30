@@ -1,3 +1,9 @@
+# frozen_string_literal: true
+
+# Measure test coverage
+require 'simplecov'
+SimpleCov.start
+
 require "activity_streams"
 
 RSpec.configure do |config|
