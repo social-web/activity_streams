@@ -60,8 +60,12 @@ module ActivityStreams
       end
     end
 
-    def _context
-      _parent&._context || @context
+    def _context(arg = nil)
+      if arg
+        @context = arg
+      else
+        _parent&._context || @context
+      end
     end
 
     def _context=(ctx)
@@ -98,8 +102,8 @@ module ActivityStreams
       @_parent = v
     end
 
-    def id
-      @id
+    def id(arg = nil)
+      arg ? @id = arg : @id
     end
 
     def id=(v)
@@ -110,8 +114,8 @@ module ActivityStreams
       self.singleton_class.extend(ext)
     end
 
-    def type
-      @type
+    def type(arg = nil)
+      arg ? @type = arg : @type
     end
 
     def type=(v)

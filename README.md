@@ -18,7 +18,7 @@ extending additional `@context`s, and can resolve IRIs automatically.
 
 ## Usage
 
-You can load an object via JSON or assignment.
+You can load an object via JSON, assignment, or a block.
 
 ### Via JSON
 
@@ -53,6 +53,13 @@ activity_stream.id = 'https://example.com/create/1'
 activity_stream.object = ActivityStreams::Object::Note.new
 activity_stream.object.type # => 'Note'
 activity_stream.object.id = 'https://example.com/note/1'
+```
+
+### Via block
+
+```ruby
+act = ActivityStreams.new { type 'Follow' }
+act.type # => 'Follow'
 ```
 
 ## Extensions

@@ -2,7 +2,15 @@
 
 require 'spec_helper'
 
-RSpec.describe ActivityStreams do
+RSpec.describe ::ActivityStreams do
+  describe 'ActivityStreams()' do
+    it 'builds an object' do
+      act = ActivityStreams.new { type 'Follow' }
+      expect(act._context).to eq(ActivityStreams::NAMESPACE)
+      expect(act.type).to eq('Follow')
+    end
+  end
+
   describe '#from_json' do
     it 'delegates to factory' do
       json = '{}'
