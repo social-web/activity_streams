@@ -8,9 +8,10 @@ module ActivityStreams
 
     def build
       hash = JSON.parse(@json)
-      raise ActivityStreams::Error unless hash['@context'] && hash['type']
+      @context = hash.delete('@context') || ActivityStreams::NAMESPACE
 
-      @context = hash.delete('@context')
+      raise ActivityStreams::Error unless hash['type']
+
       obj = deep_initialize(hash)
       raise ActivityStreams::UnsupportedType.new(@json) if obj.nil?
 
