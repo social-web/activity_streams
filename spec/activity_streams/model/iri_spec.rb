@@ -22,7 +22,7 @@ module ActivityStreams
       it 'expects a json response' do
         response = instance_double(
           'HTTP::Response',
-          headers: { 'content-type' => 'invalid' }
+          content_type: double('content-type', mime_type: 'invalid')
         )
         allow_any_instance_of(HTTP::Client).
           to receive(:get).
@@ -38,7 +38,7 @@ module ActivityStreams
             body = '{ type: Create }'
             response = instance_double(
               'HTTP::Response',
-              headers: { 'content-type' => 'json' },
+              content_type: double('content-type', mime_type: 'json'),
               status: 200,
               body: body
             )
@@ -56,7 +56,8 @@ module ActivityStreams
             location = 'new location'
             response = instance_double(
               'HTTP::Response',
-              headers: { 'content-type' => 'json', 'Location' => location },
+              headers: { 'Location' => location },
+              content_type: double('content-type', mime_type: 'json'),
               status: 300
             )
             allow_any_instance_of(HTTP::Client).
@@ -83,7 +84,7 @@ module ActivityStreams
           it 'raises an error' do
             response = instance_double(
               'HTTP::Response',
-              headers: { 'content-type' => 'json' },
+              content_type: double('content-type', mime_type: 'invalid'),
               status: 400
             )
             allow_any_instance_of(HTTP::Client).
