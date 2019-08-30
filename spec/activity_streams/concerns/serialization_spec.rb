@@ -14,8 +14,10 @@ module ActivityStreams
           obj = ActivityStreams.from_json(json)
           expect(obj._original_json).to eq(json)
 
-          expect(JSON.parse(obj._original_json).hash).
-            to eq(JSON.parse(obj.to_json).hash)
+          original = JSON.parse(obj._original_json)
+          serialized = JSON.parse(obj.to_json)
+
+          expect(original.hash).to eq(serialized.hash)
         end
       end
     end

@@ -30,7 +30,7 @@ module ActivityStreams
 
         expect(child).to respond_to(:_context=)
         expect(child.instance_variables).to include(:@context)
-        expect(child._context).to eq('child context')
+        expect(child._context).to include('child context')
 
         activity.class.property :_context
         activity.class.property :child

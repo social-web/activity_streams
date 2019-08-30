@@ -29,11 +29,8 @@ module ActivityStreams
   end
 
   class Model
-    require 'activity_streams/core'
-
     include Concerns::Properties
     include Concerns::Serialization
-    extend ActivityStreams::Core
 
     attr_accessor :_original_json
     attr_accessor :_parent
@@ -68,7 +65,29 @@ module ActivityStreams
     end
 
     def _context=(ctx)
-      properties[:_context] = @context = ctx unless _parent
+      unless _parent
+        new_ctx = case @context
+        when NilClass then @context = ctx
+        when Array
+          case ctx
+          when Array then @context | ctx
+          when String then Array.new(@context) << ctx
+          end
+        when String
+          case ctx
+          when Array then ctx << @context
+          when String then [@context, ctx]
+          end
+        end
+
+        @context = case new_ctx
+        when Array
+          new_ctx.uniq!
+          new_ctx.compact!
+          new_ctx.one? ? new_ctx.first : new_ctx
+        else new_ctx
+        end
+      end
     end
 
     def _parent=(v)
@@ -79,8 +98,24 @@ module ActivityStreams
       @_parent = v
     end
 
+    def id
+      @id
+    end
+
+    def id=(v)
+      @id ||= v.freeze
+    end
+
     def load_extension(ext)
       self.singleton_class.extend(ext)
+    end
+
+    def type
+      @type
+    end
+
+    def type=(v)
+      @type = v.freeze
     end
   end
 end

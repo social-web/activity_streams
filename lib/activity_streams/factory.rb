@@ -49,6 +49,7 @@ module ActivityStreams
       obj = klass.new
       props = hash.transform_values { |v| deep_initialize(v, obj) }
 
+      obj.type = props.delete('type')
       load_context(@context, obj)
       obj.properties = props
       obj._parent = parent if parent
