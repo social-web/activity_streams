@@ -19,12 +19,12 @@ module ActivityStreams
 
       it 'sets the parent' do
         activity.class.property :beep
-        activity.beep = ActivityStreams::Model.new
+        activity.beep = ActivityStreams::Object.new
         expect(activity.beep._parent).to eq(activity)
       end
 
       it 'removes the child context' do
-        child = ActivityStreams::Model.new
+        child = ActivityStreams::Object.new
         child.singleton_class.property :_context
         child._context = 'child context'
 
