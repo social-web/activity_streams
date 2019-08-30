@@ -31,7 +31,7 @@ module ActivityStreams
     attr_accessor :_original_json
     attr_accessor :_parent
 
-    def initialize(*a)
+    def initialize(a = nil)
       self._context = 'https://www.w3.org/ns/activitystreams'
       self.type = ActivityStreams.types.invert[self.class]
       case a
