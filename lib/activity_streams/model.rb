@@ -31,16 +31,21 @@ module ActivityStreams
     attr_accessor :_original_json
     attr_accessor :_parent
 
-    def initialize(a = nil)
+    def initialize(arg = nil)
       self._context = 'https://www.w3.org/ns/activitystreams'
       self.type = ActivityStreams.types.invert[self.class]
-      case a
-      when Hash then a.each { |k, v| public_send("#{k}=", v) }
+
+      case arg
+      when Hash then props = arg
       when String
-        if a.match?(::URI.regexp(%w[http https]))
-          IRI::Dereference.call(a)
+        if arg.match?(::URI.regexp(%w[http https]))
+          props = IRI::Dereference.call(arg).to_h
+        else
+          raise TypeError, 'Expected a hash of attributes or a URI'
         end
       end
+
+      props.each { |k, v| public_send("#{k}=", v) } if props
     end
 
     def ==(obj)
