@@ -25,7 +25,7 @@ module ActivityStreams
     Dereference = ->(iri) {
       res = HTTP.headers(DEFAULT_HEADERS).get(iri)
 
-      unless res.content_type.match?(/json/)
+      unless res.content_type.mime_type.match?(/json/)
         raise IRIDereferencingError.new "Unable to dereference \"#{iri}\". " \
           "Invalid content-type: #{res.headers['content-type']}"
         MSG
