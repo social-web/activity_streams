@@ -19,6 +19,13 @@ module ActivityStreams
 
   def self.register_type(type, klass)
     types[type.to_s] = klass
+
+    method_name = type.to_s.gsub(/([A-Za-z\d]+)([A-Z][a-z])/,'\1_\2').downcase
+    define_singleton_method method_name do
+      klass.new
+    end
+
+    klass
   end
 
   class Model

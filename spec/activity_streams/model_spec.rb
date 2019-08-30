@@ -4,6 +4,29 @@ require 'spec_helper'
 
 module ActivityStreams
   RSpec.describe Model do
+    describe '.register_type' do
+      it 'stores the type and its klass' do
+        type = 'Boop'
+        SomeClass = Class.new
+        expect { ActivityStreams.register_type(type, SomeClass) }.
+          to change { ActivityStreams.types[type] }.to(SomeClass)
+        ActivityStreams.types.delete type
+        ActivityStreams.singleton_class.remove_method(type.downcase)
+      end
+
+      it 'defines a convenient getter method for the type' do
+        type = 'Boop'
+        AnotherClass = Class.new
+        expect { ActivityStreams.register_type(type, SomeClass) }.
+          to change { ActivityStreams.respond_to?(type.downcase) }.to(true)
+        expect(
+          ActivityStreams.public_send(type.downcase)
+        ).to be_an_instance_of(SomeClass)
+        ActivityStreams.types.delete type
+        ActivityStreams.singleton_class.remove_method(type.downcase)
+      end
+    end
+
     describe '#initialize' do
       it 'sets type on initialize' do
         obj = ::ActivityStreams::Object.new
