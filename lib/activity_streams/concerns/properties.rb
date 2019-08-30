@@ -88,16 +88,19 @@ module ActivityStreams
       end
 
       def valid?
-        properties.each { |k, v| check_type(v, self.class.properties[k]) }
+        check_types
         errors.none?
       end
 
       private
 
-      def check_type(v, type)
-        type[v]
-      rescue Dry::Types::ConstraintError => e
-        errors << e.message
+      def check_types
+        properties.each do |k, v|
+          type = self.class.properties[k]
+          type[v]
+        rescue Dry::Types::ConstraintError => e
+          errors << { k => e.message }
+        end
       end
     end
   end
