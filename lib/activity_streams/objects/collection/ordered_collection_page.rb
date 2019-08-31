@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'activity_streams/model/collection/ordered_collection'
+require 'activity_streams/objects/collection/ordered_collection'
 
 module ActivityStreams
   class Collection::OrderedCollectionPage < Collection::OrderedCollection

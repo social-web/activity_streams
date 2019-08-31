@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'activity_streams/model/object/document'
+require 'activity_streams/objects/object/document'
 
 module ActivityStreams
   class Object::Audio < Object::Document

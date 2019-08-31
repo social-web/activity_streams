@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'activity_streams/model/activity/accept'
+require 'activity_streams/objects/activity/accept'
 
 module ActivityStreams
   class Activity::TentativeAccept < Activity::Accept

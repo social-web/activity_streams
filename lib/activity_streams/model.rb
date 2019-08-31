@@ -131,9 +131,9 @@ module ActivityStreams
 end
 
 Dir[File.join(__dir__, 'extensions', '**', '*.rb')].each { |f| require f }
-require_relative './model/object'
-require_relative './model/activity'
-require_relative './model/actor'
-require_relative './model/collection'
-require_relative './model/link'
-require_relative './model/iri'
+require_relative './objects/object'
+require_relative './objects/activity'
+require_relative './objects/actor'
+require_relative './objects/collection'
+require_relative './objects/link'
+require_relative './objects/iri'
