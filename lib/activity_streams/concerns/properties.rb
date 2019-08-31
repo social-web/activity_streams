@@ -27,7 +27,8 @@ module ActivityStreams
                 each.with_object({}) { |anc, t| t.merge!(anc.properties) }
           end
 
-          def self.property(name, type = ::ActivityStreams::PropertyTypes::Any)
+          def self.property(name, type = ::ActivityStreams::PropertyTypes::Any, options = {})
+            options = { dereference: false }.merge(options)
             name = name.to_sym
             return if method_defined?(name) || singleton_methods.include?(name)
 
@@ -55,9 +56,14 @@ module ActivityStreams
                 }
               end
 
-              if IRI::IsResolveable.call(name, v) && ActivityStreams.internet.on?
-                v = IRI::Dereference.call(v)
+              if ActivityStreams.internet.on?
+                if options[:dereference]
+                  if IRI::IsResolveable.call(name, v)
+                    v = IRI::Dereference.call(v)
+                  end
+                end
               end
+
               properties[name] = v
               instance_variable_set("@#{name}", type[v])
             rescue Dry::Types::ConstraintError => e

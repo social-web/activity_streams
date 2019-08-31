@@ -23,7 +23,9 @@ module ActivityStreams
     }
 
     Dereference = ->(iri) {
-      return if iri.match?(ActivityStreams.config.domain)
+      if ActivityStreams.config.domain && iri.match?(ActivityStreams.config.domain)
+        return
+      end
 
       res = HTTP.headers(DEFAULT_HEADERS).get(iri)
       unless res.content_type.mime_type.match?(/json/)
@@ -43,7 +45,7 @@ module ActivityStreams
         ActivityStreams.from_json(body)
       when 300..399 then IRI::Dereference.call(res.headers['Location'])
       when 400..499
-        raise IRIDereferencingError.new <<~MSG
+        warn <<~MSG
           Unable to dereference "#{iri}". Received status: #{res.status}.
         MSG
       when 500..599 then # retry?

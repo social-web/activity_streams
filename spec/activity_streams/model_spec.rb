@@ -5,25 +5,23 @@ require 'spec_helper'
 module ActivityStreams
   RSpec.describe Model do
     describe '.register_type' do
-      it 'stores the type and its klass' do
-        type = 'Boop'
-        SomeClass = Class.new
-        expect { ActivityStreams.register_type(type, SomeClass) }.
-          to change { ActivityStreams.types[type] }.to(SomeClass)
+      let(:some_class) { Class.new(ActivityStreams::Model) }
+      let(:type) { 'Boop' }
+      after(:each) do
         ActivityStreams.types.delete type
         ActivityStreams.singleton_class.remove_method(type.downcase)
       end
 
+      it 'stores the type and its klass' do
+        expect { ActivityStreams.register_type(type, some_class) }.
+          to change { ActivityStreams.types[type] }.to(some_class)
+      end
+
       it 'defines a convenient getter method for the type' do
-        type = 'Boop'
-        AnotherClass = Class.new
-        expect { ActivityStreams.register_type(type, SomeClass) }.
+        expect { ActivityStreams.register_type(type, some_class) }.
           to change { ActivityStreams.respond_to?(type.downcase) }.to(true)
-        expect(
-          ActivityStreams.public_send(type.downcase)
-        ).to be_an_instance_of(SomeClass)
-        ActivityStreams.types.delete type
-        ActivityStreams.singleton_class.remove_method(type.downcase)
+        expect(ActivityStreams.public_send(type.downcase)).
+          to be_an_instance_of(some_class)
       end
     end
 

@@ -21,8 +21,8 @@ module ActivityStreams
     types[type.to_s] = klass
 
     method_name = type.to_s.gsub(/([A-Za-z\d]+)([A-Z][a-z])/,'\1_\2').downcase
-    define_singleton_method method_name do
-      klass.new
+    define_singleton_method method_name do |x = nil|
+      klass.new(x)
     end
 
     klass
@@ -40,7 +40,9 @@ module ActivityStreams
       self.type = ActivityStreams.types.invert[self.class]
 
       case arg
-      when Hash then props = arg
+      when Hash
+        self.id = arg.delete('id') || arg.delete(:id)
+        props = arg
       when String
         if arg.match?(::URI.regexp(%w[http https]))
           props = IRI::Dereference.call(arg).to_h
