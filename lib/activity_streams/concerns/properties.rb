@@ -56,14 +56,6 @@ module ActivityStreams
                 }
               end
 
-              if ActivityStreams.internet.on?
-                if options[:dereference]
-                  if IRI::IsResolveable.call(name, v)
-                    v = IRI::Dereference.call(v)
-                  end
-                end
-              end
-
               properties[name] = v
               instance_variable_set("@#{name}", type[v])
             rescue Dry::Types::ConstraintError => e

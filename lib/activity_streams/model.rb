@@ -21,8 +21,8 @@ module ActivityStreams
     types[type.to_s] = klass
 
     method_name = type.to_s.gsub(/([A-Za-z\d]+)([A-Z][a-z])/,'\1_\2').downcase
-    define_singleton_method method_name do |x = nil|
-      klass.new(x)
+    define_singleton_method method_name do |**props|
+      klass.new(props)
     end
 
     klass
@@ -35,23 +35,14 @@ module ActivityStreams
     attr_accessor :_original_json
     attr_accessor :_parent
 
-    def initialize(arg = nil)
+    def initialize(**props)
       self._context = 'https://www.w3.org/ns/activitystreams'
       self.type = ActivityStreams.types.invert[self.class]
 
-      case arg
-      when Hash
-        self.id = arg.delete('id') || arg.delete(:id)
-        props = arg
-      when String
-        if arg.match?(::URI.regexp(%w[http https]))
-          props = IRI::Dereference.call(arg).to_h
-        else
-          raise TypeError, 'Expected a hash of attributes or a URI'
-        end
+      if props
+        self.id = props.delete('id') || props.delete(:id)
+        props.each { |k, v| public_send("#{k}=", v) } if props
       end
-
-      props.each { |k, v| public_send("#{k}=", v) } if props
     end
 
     def ==(obj)
@@ -136,4 +127,3 @@ require_relative './objects/activity'
 require_relative './objects/actor'
 require_relative './objects/collection'
 require_relative './objects/link'
-require_relative './objects/iri'
