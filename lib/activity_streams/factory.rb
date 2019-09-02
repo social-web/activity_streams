@@ -15,7 +15,7 @@ module ActivityStreams
       obj = deep_initialize(hash)
       raise ActivityStreams::UnsupportedType.new(@json) if obj.nil?
 
-      obj._context = @context
+      obj.context = @context
       obj._original_json = @json
       obj
     rescue JSON::ParserError => e
@@ -38,7 +38,7 @@ module ActivityStreams
       when Hash then ctx.each_value { |c| load_context(c, obj) }
       when String then
         mod = ActivityStreams.contexts[ctx]
-        obj.load_extension(mod) if mod
+        obj._load_extension(mod) if mod
       when NilClass then raise TypeError
       end
     end

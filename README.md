@@ -34,7 +34,7 @@ json = %({
   })
 
 activity_stream = ActivityStreams.from_json(json) # => <ActivityStreams::Activity::Create:instance>
-activity_stream._context # => 'https://www.w3.org/ns/activitystreams'
+activity_stream.context # => 'https://www.w3.org/ns/activitystreams'
 activity_stream.type # => 'Create'
 activity_stream.id # => 'https://example.com/create/1'
 activity_stream.object # => <ActivityStreams::Object::Note:instance>
@@ -46,7 +46,7 @@ activity_stream.object.id # =>  'https://example.com/note/1'
 
 ```ruby
 activity_stream = ActivityStreams::Activity::Create.new
-activity_stream._context # => 'https://www.w3.org/ns/activitystreams'
+activity_stream.context # => 'https://www.w3.org/ns/activitystreams'
 activity_stream.type # => 'Create'
 activity_stream.id = 'https://example.com/create/1'
 
@@ -90,7 +90,7 @@ json = %({
   })
 
 activity_stream = ActivityStreams.from_json(json)
-activity_stream._context # => [
+activity_stream.context # => [
   #   "https://www.w3.org/ns/activitystreams",
   #   "https://example.org/ns/mycontext"  
   # ]

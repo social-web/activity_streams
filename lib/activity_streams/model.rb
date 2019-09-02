@@ -36,7 +36,7 @@ module ActivityStreams
     attr_accessor :_parent
 
     def initialize(**props)
-      self._context = 'https://www.w3.org/ns/activitystreams'
+      self.context = 'https://www.w3.org/ns/activitystreams'
       self.type = ActivityStreams.types.invert[self.class]
 
       if props
@@ -53,15 +53,15 @@ module ActivityStreams
       end
     end
 
-    def _context(arg = nil)
+    def context(arg = nil)
       if arg
         @context = arg
       else
-        _parent&._context || @context
+        _parent&.context || @context
       end
     end
 
-    def _context=(ctx)
+    def context=(ctx)
       unless _parent
         new_ctx = case @context
         when NilClass then @context = ctx
@@ -88,7 +88,7 @@ module ActivityStreams
     end
 
     def _parent=(v)
-      self.instance_eval('undef :_context=') if respond_to?(:_context=)
+      self.instance_eval('undef :context=') if respond_to?(:context=)
       remove_instance_variable(:@context) if @context
       _unsupported_properties.delete('@context')
       @_parent = v
@@ -107,7 +107,7 @@ module ActivityStreams
       type == their_type
     end
 
-    def load_extension(ext)
+    def _load_extension(ext)
       self.singleton_class.extend(ext)
     end
 

@@ -9,7 +9,7 @@ module ActivityStreams
         act = ActivityStreams::Object.new
         expect(act).not_to respond_to(:sensitive)
         expect(act).not_to respond_to(:sensitive=)
-        act.load_extension(described_class)
+        act._load_extension(described_class)
         expect(act).to respond_to(:sensitive)
         expect(act).to respond_to(:sensitive=)
 

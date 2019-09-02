@@ -6,7 +6,7 @@ RSpec.describe ::ActivityStreams do
   describe 'ActivityStreams()' do
     it 'builds an object' do
       act = ActivityStreams.new { type 'Follow' }
-      expect(act._context).to eq(ActivityStreams::NAMESPACE)
+      expect(act.context).to eq(ActivityStreams::NAMESPACE)
       expect(act.type).to eq('Follow')
     end
   end

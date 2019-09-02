@@ -25,21 +25,21 @@ module ActivityStreams
 
       it 'removes the child context' do
         child = ActivityStreams::Object.new
-        child.singleton_class.property :_context
-        child._context = 'child context'
+        child.singleton_class.property :context
+        child.context = 'child context'
 
-        expect(child).to respond_to(:_context=)
+        expect(child).to respond_to(:context)
         expect(child.instance_variables).to include(:@context)
-        expect(child._context).to include('child context')
+        expect(child.context).to include('child context')
 
-        activity.class.property :_context
+        activity.class.property :context
         activity.class.property :child
-        activity._context = 'parent context'
+        activity.context = 'parent context'
         activity.child = child
 
-        expect(child).not_to respond_to(:_context=)
+        expect(child).not_to respond_to(:context=)
         expect(child.instance_variables).not_to include(:@context)
-        expect(child._context).to eq(activity._context)
+        expect(child.context).to eq(activity.context)
       end
     end
   end

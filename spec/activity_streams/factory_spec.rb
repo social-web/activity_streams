@@ -13,9 +13,9 @@ module ActivityStreams
       expect(collection._original_json).to eq(json)
       expect(collection).to be_a (ActivityStreams::Collection)
       expect(collection.valid?).to eq(true)
-      expect(collection._context).
+      expect(collection.context).
         to eq('https://www.w3.org/ns/activitystreams')
-      expect(collection._context).to eq('https://www.w3.org/ns/activitystreams')
+      expect(collection.context).to eq('https://www.w3.org/ns/activitystreams')
       expect(collection.type).to eq('Collection')
 
       expect(collection.items).to be_a(Array)
