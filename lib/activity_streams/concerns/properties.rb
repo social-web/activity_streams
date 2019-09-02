@@ -35,8 +35,10 @@ module ActivityStreams
             properties.merge!(name => type)
 
             # Define getter
-            define_method(name) do |arg = nil|
-              if arg
+            define_method(name) do |arg = nil, &blk|
+              if blk
+                public_send("#{name}=", blk.call)
+              elsif arg
                 public_send("#{name}=", arg)
               else
                 instance_variable_get("@#{name}")

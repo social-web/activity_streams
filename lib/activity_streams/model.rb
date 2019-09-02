@@ -21,8 +21,14 @@ module ActivityStreams
     types[type.to_s] = klass
 
     method_name = type.to_s.gsub(/([A-Za-z\d]+)([A-Z][a-z])/,'\1_\2').downcase
-    define_singleton_method method_name do |**props|
-      klass.new(props)
+    define_singleton_method method_name do |**props, &blk|
+      if blk
+        instance = klass.new
+        instance.instance_exec(&blk)
+        instance
+      else
+        klass.new(props)
+      end
     end
 
     klass
