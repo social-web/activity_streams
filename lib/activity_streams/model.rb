@@ -81,8 +81,11 @@ module ActivityStreams
         when Array
           new_ctx.uniq!
           new_ctx.compact!
+          new_ctx.each { |ctx| _load_extension(ctx) }
           new_ctx.one? ? new_ctx.first : new_ctx
-        else new_ctx
+        else
+          _load_extension(ctx)
+          new_ctx
         end
       end
     end
@@ -107,8 +110,9 @@ module ActivityStreams
       type == their_type
     end
 
-    def _load_extension(ext)
-      self.singleton_class.extend(ext)
+    def _load_extension(ctx)
+      mod = ActivityStreams.contexts[ctx]
+      self.singleton_class.extend(mod) if mod
     end
 
     def type(arg = nil)

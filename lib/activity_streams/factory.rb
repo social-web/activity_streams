@@ -36,9 +36,7 @@ module ActivityStreams
       case ctx
       when Array then ctx.each { |c| load_context(c, obj) }
       when Hash then ctx.each_value { |c| load_context(c, obj) }
-      when String then
-        mod = ActivityStreams.contexts[ctx]
-        obj._load_extension(mod) if mod
+      when String then obj._load_extension(ctx)
       when NilClass then raise TypeError
       end
     end
