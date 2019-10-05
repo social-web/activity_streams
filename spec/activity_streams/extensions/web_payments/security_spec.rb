@@ -13,7 +13,7 @@ module ActivityStreams
         }
 
         it 'includes relevant properties' do
-          %i[id owner publicKey publicKeyPem].each do |prop|
+          %i[publicKey publicKeyPem signature].each do |prop|
             expect(activity).to respond_to(prop)
             expect(activity).to respond_to("#{prop}=")
           end
