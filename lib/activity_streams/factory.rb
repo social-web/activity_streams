@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'ostruct'
+
 module ActivityStreams
   class Factory
     def initialize(json)
@@ -26,7 +28,7 @@ module ActivityStreams
 
     def deep_initialize(object, parent = nil)
       case object
-      when Hash then object['type'] ? transform_values(object, parent) : object
+      when Hash then object['type'] ? transform_values(object, parent) : OpenStruct.new(object)
       when Array then object.map { |o| deep_initialize(o, parent) }
       else object
       end

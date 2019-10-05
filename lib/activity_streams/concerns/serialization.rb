@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'ostruct'
+
 module ActivityStreams
   module Concerns
     module Serialization
@@ -32,6 +34,7 @@ module ActivityStreams
         when ActivityStreams::Model then v.to_h
         when Array then v.map(&method(:transform_values))
         when Date, Time then v.iso8601
+        when OpenStruct then transform_values(v.to_h)
         else v
         end
       end
