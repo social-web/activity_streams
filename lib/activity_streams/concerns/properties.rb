@@ -71,11 +71,6 @@ module ActivityStreams
         @errors ||= []
       end
 
-      def method_missing(m, *args, &block)
-        raise NoPropertyError,
-          "The propery '#{m}' is not available on #{self}."
-      end
-
       def properties
         @properties ||= {}
       end
