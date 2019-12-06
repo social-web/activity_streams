@@ -111,6 +111,15 @@ module ActivityStreams
       @id ||= v.freeze
     end
 
+    def inspect
+      props = properties.map do |prop, val|
+        prop = %(@#{prop})
+        val = val.is_a?(self.class) ? val.id : val
+        %(#{prop}=#{val.inspect || 'nil'})
+      end
+      %(#<#{self.class.name} #{props.join(' ')}>)
+    end
+
     def is_a?(klass)
       their_type = ActivityStreams.types.invert[klass]
       type == their_type
