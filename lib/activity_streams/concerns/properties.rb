@@ -67,6 +67,14 @@ module ActivityStreams
         end
       end
 
+      def [](prop)
+        @properties[prop]
+      end
+
+      def []=(prop, val)
+        @properties[prop] = val
+      end
+
       def errors
         @errors ||= []
       end
