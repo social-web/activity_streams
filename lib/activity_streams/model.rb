@@ -122,7 +122,7 @@ module ActivityStreams
 
     def is_a?(klass)
       their_type = ActivityStreams.types.invert[klass]
-      type == their_type
+      [their_type, type, ActivityStreams, ActivityStreams::Object].include?(klass)
     end
 
     def _load_extension(ctx)
