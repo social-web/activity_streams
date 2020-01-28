@@ -35,6 +35,7 @@ module ActivityStreams
   end
 
   class Model
+    include Concerns::Identity
     include Concerns::Properties
     include Concerns::Serialization
 
@@ -43,19 +44,9 @@ module ActivityStreams
 
     def initialize(**props)
       self.context = 'https://www.w3.org/ns/activitystreams'
-      self.type = ActivityStreams.types.invert[self.class]
-
-      if props
-        self.id = props.delete('id') || props.delete(:id)
-        props.each { |k, v| public_send("#{k}=", v) } if props
-      end
-    end
-
-    def ==(obj)
-      case obj
-      when ActivityStreams::Model then obj.id == id
-      when Hash then [obj['id'], obj[:id]].include?(id)
-      else false
+      @properties = props if props
+      unless @properties[:type]
+        @properties[:type] = ActivityStreams.types.invert[self.class]
       end
     end
 
@@ -101,28 +92,6 @@ module ActivityStreams
       remove_instance_variable(:@context) if @context
       _unsupported_properties.delete('@context')
       @_parent = v
-    end
-
-    def id(arg = nil)
-      arg ? @id = arg : @id
-    end
-
-    def id=(v)
-      @id ||= v.freeze
-    end
-
-    def inspect
-      props = properties.map do |prop, val|
-        prop = %(@#{prop})
-        val = val.is_a?(self.class) ? val.id : val
-        %(#{prop}=#{val.inspect || 'nil'})
-      end
-      %(#<#{self.class.name} #{props.join(' ')}>)
-    end
-
-    def is_a?(klass)
-      their_type = ActivityStreams.types.invert[klass]
-      [their_type, type, ActivityStreams, ActivityStreams::Object].include?(klass)
     end
 
     def _load_extension(ctx)

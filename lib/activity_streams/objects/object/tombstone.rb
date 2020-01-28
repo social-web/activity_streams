@@ -5,6 +5,6 @@ module ActivityStreams
     ActivityStreams.register_type('Tombstone', self)
 
     property :formerType
-    property :deleted, PropertyTypes::Params::Time
+    property :deleted, type: PropertyTypes::Params::Time
   end
 end

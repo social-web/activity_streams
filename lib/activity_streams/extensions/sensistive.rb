@@ -7,7 +7,7 @@ module ActivityStreams
 
       def self.extended(base)
         base.class_eval do
-          property :sensitive, PropertyTypes::Params::Bool
+          property :sensitive, type: PropertyTypes::Params::Bool
         end
       end
     end
