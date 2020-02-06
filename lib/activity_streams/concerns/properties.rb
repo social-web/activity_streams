@@ -41,6 +41,37 @@ module ActivityStreams
         props.each { |k, v| properties.merge!(k.to_sym => v) }
       end
 
+      # Traverse this object's properties, breadth-first to the given `depth`.
+      # A block will be yieled a hash of the `parent`, `child`, and `property`
+      # to visit each relationship. The block must return a dereferenced child.
+      def traverse_properties(props = properties.keys, depth: Float::INFINITY)
+        cache = {}
+        queue = [self]
+        loop_count = 0
+        while !queue.empty? && loop_count <= depth do
+          obj = queue.shift # Breadth-first
+          props.each do |prop|
+            child = obj[prop]
+
+            if block_given?
+              child = yield(parent: obj, child: child, property: prop)
+            end
+
+            case child
+            when Array then
+              queue += child.compact
+              next
+            when TrueClass, FalseClass, NilClass then next
+            else queue << child
+            end
+
+            queue << child
+            loop_count += 1
+          end
+        end
+        self
+      end
+
       def valid?
         check_types
         errors.none?
