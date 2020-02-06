@@ -14,9 +14,13 @@ module ActivityStreams
       def inspect
         props = properties.map do |prop, val|
           prop = %(@#{prop})
-          val = val.is_a?(self.class) ? val.id : val
+          val = val.is_a?(ActivityStreams::Object) ?
+            %(#<#{val.class.name} @id="#{val[:id]}">) :
+            val
+
           %(#{prop}=#{val.inspect || 'nil'})
         end
+
         %(#<#{self.class.name} #{props.join(' ')}>)
       end
 
