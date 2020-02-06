@@ -5,8 +5,8 @@ module ActivityStreams
     module Identity
       def ==(obj)
         case obj
-        when ActivityStreams::Model then obj.id == self[:id]
-        when Hash then [obj['id'], obj[:id]].include?(self[:id])
+        when ActivityStreams::Model then obj[:id] == self[:id]
+        when Hash then obj[:id] == self[:id]
         else false
         end
       end
