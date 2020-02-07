@@ -45,30 +45,21 @@ module ActivityStreams
       # A block will be yieled a hash of the `parent`, `child`, and `property`
       # to visit each relationship. The block must return a dereferenced child.
       def traverse_properties(props = properties.keys, depth: Float::INFINITY)
-        cache = {}
-        queue = [self]
-        loop_count = 0
-        while !queue.empty? && loop_count <= depth do
-          obj = queue.shift # Breadth-first
+        ActivityStreams::Utilities::Queue.new.call(self, depth: depth) do |obj|
           props.each do |prop|
+            queued_up = []
+            next unless obj.is_a?(ActivityStreams)
+
             child = obj[prop]
 
             if block_given?
               child = yield(parent: obj, child: child, property: prop)
             end
 
-            case child
-            when Array then
-              queue += child.compact
-              next
-            when TrueClass, FalseClass, NilClass then next
-            else queue << child
-            end
-
-            queue << child
-            loop_count += 1
+            child
           end
         end
+
         self
       end
 

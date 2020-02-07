@@ -10,6 +10,7 @@ require 'activity_streams/errors'
 require 'activity_streams/property_types'
 require 'activity_streams/model'
 require 'activity_streams/factory'
+require 'activity_streams/utilities/queue'
 
 module ActivityStreams
   NAMESPACE = 'https://www.w3.org/ns/activitystreams'
