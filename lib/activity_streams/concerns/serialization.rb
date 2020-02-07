@@ -18,24 +18,33 @@ module ActivityStreams
       end
 
       def to_h
-        props = properties.dup
-        props.merge!('@context' => @context) if @context
-        props.merge!('type' => @type) if @type
-        props.merge!('id' => @id) if @id
+        props = props.dup
+        props.merge!(:@context => self[:@context]) if self[:@context]
+        props.merge!(type: self[:type]) if self[:type]
+        props.merge!(id: self[:id]) if self[:id]
         props.merge!(_unsupported_properties) unless _unsupported_properties.empty?
+        props.transform_keys! { |k| k.to_sym }
         props = self.is_a?(ActivityStreams::Activity::Update) ? props : props.compact
-        props.transform_values { |v| transform_values(v) }
-      end
 
-      private
+        # Avoid infinite loops caused by circles in nested properties
+        compress!
 
-      def transform_values(v)
-        case v
-        when ActivityStreams::Model then v.to_h
-        when Array then v.map(&method(:transform_values))
-        when Date, Time then v.iso8601
-        when OpenStruct then transform_values(v.to_h)
-        else v
+        ActivityStreams::Utilities::Queue.new.call(props, depth: 1) do |prps|
+          next unless prps.is_a?(Hash)
+
+          queued_up = []
+
+          prps.transform_values! do |v|
+            case v
+            when ActivityStreams::Model then v.properties
+            when Array then v.map { |i| i.to_json }
+            when Date, Time then v.iso8601
+            when OpenStruct then v.to_h
+            else v
+            end
+          end
+
+          queued_up
         end
       end
     end
