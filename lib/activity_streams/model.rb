@@ -50,6 +50,14 @@ module ActivityStreams
       end
     end
 
+    def compress!
+      traverse_properties(depth: 1) do |hash|
+        parent, child, prop = hash.values_at(:parent, :child, :property)
+        parent[prop] = child[:id] if child.is_a?(ActivityStreams::Object)
+      end
+      self
+    end
+
     def context(arg = nil)
       if arg
         @context = arg
