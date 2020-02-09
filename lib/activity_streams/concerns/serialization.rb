@@ -27,7 +27,7 @@ module ActivityStreams
         props = self.is_a?(ActivityStreams::Activity::Update) ? props : props.compact
 
         # Avoid infinite loops caused by circles in nested properties
-        compress!
+        props = compress.properties
 
         ActivityStreams::Utilities::Queue.new.call(props, depth: 1) do |prps|
           next unless prps.is_a?(Hash)
