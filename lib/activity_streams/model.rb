@@ -35,7 +35,7 @@ module ActivityStreams
         instance.instance_exec(&blk)
         instance
       else
-        klass.new(props)
+        klass.new(**props)
       end
     end
 
