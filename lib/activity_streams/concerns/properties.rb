@@ -77,7 +77,7 @@ module ActivityStreams
       end
 
       def properties=(props)
-        props.each { |k, v| properties.merge!(k.to_sym => v) }
+        props.each { |k, v| self[k] = v }
       end
 
       # Traverse this object's properties, breadth-first to the given `depth`.
