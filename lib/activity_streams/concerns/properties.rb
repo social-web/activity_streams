@@ -5,12 +5,19 @@ module ActivityStreams
 
   module Concerns
     module Properties
+      DEFAULT_PROPERTIES = { id: nil, type: nil }.freeze
+      REQUIRED_PROPERTIES = %i[id type].freeze
+
       def self.included(base)
         base.class_eval do
           def self.properties
-            @properties ||= self.ancestors[1..].
+            @properties ||= begin
+              ancestor_props = self.ancestors[1..].
                 select { |anc| anc.respond_to?(:properties) }.
-                each.with_object({}) { |anc, props| props.merge!(anc.properties) }
+                each.with_object({}) { |anc, props| props.merge!(anc.properties) }.freeze
+
+              DEFAULT_PROPERTIES.merge(ancestor_props)
+            end
           end
 
           def self.property(name, **options)
