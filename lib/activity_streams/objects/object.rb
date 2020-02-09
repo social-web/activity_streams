@@ -8,7 +8,6 @@ module ActivityStreams
       bcc bto
       cc content context
       duration
-      endTime
       generator
       icon image inReplyTo
       location
@@ -24,6 +23,7 @@ module ActivityStreams
 
     property :published, type: PropertyTypes::Params::Time
     property :startTime, type: PropertyTypes::Params::Time
+    property :endTime, type: PropertyTypes::Params::Time
     property :updated, type: PropertyTypes::Params::Time
   end
 end
