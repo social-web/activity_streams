@@ -15,13 +15,13 @@ module ActivityStreams
         props = properties.map do |prop, val|
           prop = %(@#{prop})
           val = val.is_a?(ActivityStreams::Object) ?
-            %(#<#{val.class.name} @id="#{val[:id]}">) :
+            %(#<ActivityStreams::#{val[:type]} @id="#{val[:id]}">) :
             val
 
           %(#{prop}=#{val.inspect || 'nil'})
         end
 
-        %(#<#{self.class.name} #{props.join(' ')}>)
+        %(#<ActivityStreams:#{self[:type]} #{props.join(' ')}>)
       end
 
       def is_a?(klass)
