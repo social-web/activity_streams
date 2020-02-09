@@ -16,7 +16,39 @@ module ActivityStreams
           def self.property(name, **options)
             name = name.to_sym
             type = options[:type] || ::ActivityStreams::PropertyTypes::Any
+            if ActivityStreams.config.accessor_methods == true
+              define_method_accessors(name)
+            end
             properties.merge!(name => type)
+          end
+
+          def self.define_method_accessors(name, type = ::ActivityStreams::PropertyTypes::Any, options = {})
+            # Define getter.
+            define_method(name) { properties[name.to_sym] }
+
+            # Define setter
+            define_method("#{name}=") do |arg|
+              # First set the current object as the parent of the value.
+              # TODO: Why?
+              case arg
+              when ActivityStreams::Model then arg._parent = self
+              when Array
+                arg = arg.map { |child|
+                  if child.is_a?(ActivityStreams::Model)
+                    child._parent = self
+                  end
+                  child
+                }
+              end
+
+              # Set property
+              properties[name] = arg
+
+              # Set instance var for object orientation's sake
+              instance_variable_set("@#{name}", type[arg])
+
+              arg
+            end
           end
         end
       end

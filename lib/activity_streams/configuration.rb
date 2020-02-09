@@ -12,6 +12,6 @@ module ActivityStreams
   class Configuration
     include Singleton
 
-    attr_accessor :domain
+    attr_accessor :accessor_methods
   end
 end
