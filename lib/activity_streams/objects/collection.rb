@@ -7,7 +7,7 @@ module ActivityStreams
     ActivityStreams.register_type('Collection', self)
     %i[current first items last totalItems].each(&method(:property))
 
-    def traverse_items(depth: SocialWeb['config'].max_depth)
+    def traverse_items(depth: Float::INFINITY)
       loop_count = 0
       queue = self[:items] || []
       items = []
