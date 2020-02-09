@@ -55,9 +55,15 @@ module ActivityStreams
 
     def initialize(**props)
       self.context = 'https://www.w3.org/ns/activitystreams'
-      @properties = props if props
-      unless @properties[:type]
-        @properties[:type] = ActivityStreams.types.invert[self.class]
+
+      self[:id] = self[:type] = nil
+
+      if props
+        props.each { |k, v| self[k] = v }
+      end
+
+      unless properties[:type]
+        properties[:type] = ActivityStreams.types.invert[self.class]
       end
     end
 
