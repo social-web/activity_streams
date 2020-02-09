@@ -16,12 +16,6 @@ module ActivityStreams
   NAMESPACE = 'https://www.w3.org/ns/activitystreams'
 
   class << self
-    def new(&blk)
-      act = ActivityStreams::Object.new
-      act.instance_eval &blk
-      act
-    end
-
     def from_json(json)
       Factory.new(json).build
     end
