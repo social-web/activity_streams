@@ -18,7 +18,7 @@ module ActivityStreams
       end
 
       def to_h
-        props = props.dup
+        props = properties.dup
         props.merge!(:@context => self[:@context]) if self[:@context]
         props.merge!(type: self[:type]) if self[:type]
         props.merge!(id: self[:id]) if self[:id]
