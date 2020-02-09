@@ -115,6 +115,7 @@ module ActivityStreams
           type[v]
         rescue Dry::Types::ConstraintError => e
           errors << { k => e.message }
+          next
         end
       end
     end
