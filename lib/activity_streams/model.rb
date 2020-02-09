@@ -9,6 +9,14 @@ module ActivityStreams
     @contexts ||= {}
   end
 
+  def self.new(**props)
+    if props[:type]
+      types[props[:type]].new(**props)
+    else
+      self.object(**props)
+    end
+  end
+
   def self.register_context(ctx, mod)
     contexts[ctx] = mod
   end
