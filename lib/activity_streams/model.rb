@@ -47,6 +47,9 @@ module ActivityStreams
     include Concerns::Properties
     include Concerns::Serialization
 
+    property :id
+    property :type
+
     attr_accessor :_original_json
     attr_accessor :_parent
 
