@@ -12,9 +12,11 @@ module ActivityStreams
       hash = JSON.parse(@json)
       @context = hash.delete('@context') || ActivityStreams::NAMESPACE
 
-      raise ActivityStreams::Error unless hash['type']
+      unless hash['type']
+        raise ActivityStreams::Error.new('ActivityStreams require a "type" property')
+      end
 
-      obj = deep_initialize(hash)
+      obj = from_hash(hash)
       raise ActivityStreams::UnsupportedType.new(@json) if obj.nil?
 
       obj.context = @context
@@ -26,12 +28,40 @@ module ActivityStreams
 
     private
 
-    def deep_initialize(object, parent = nil)
-      case object
-      when Hash then object['type'] ? transform_values(object, parent) : OpenStruct.new(object)
-      when Array then object.map { |o| deep_initialize(o, parent) }
-      else object
+    def from_hash(hash)
+      obj = build_model(hash)
+
+      ActivityStreams::Utilities::Queue.new.call(obj) do |o|
+        queued_up = []
+
+        o.to_h.each do |prop, v|
+          case v
+          when Hash
+            queued_up << child = build_model(v)
+            o[prop] = child
+            child._parent = o
+          end
+        end
+
+        queued_up
       end
+
+      obj
+    end
+
+    def build_model(hash)
+      return OpenStruct.new(hash) unless hash['type']
+
+      klass = ActivityStreams.types_registry[hash['type']]
+      return OpenStruct.new(hash) unless klass
+
+      obj = klass.new
+
+      load_context(@context, obj)
+      obj.properties = hash
+
+      obj._unsupported_properties = unsupported_properties(klass, hash)
+      obj
     end
 
     def load_context(ctx, obj)
@@ -41,22 +71,6 @@ module ActivityStreams
       when String then obj._load_extension(ctx)
       when NilClass then raise TypeError
       end
-    end
-
-    def transform_values(hash, parent = nil)
-      klass = ActivityStreams.types[hash['type']]
-      return if klass.nil?
-
-      obj = klass.new
-      props = hash.transform_values { |v| deep_initialize(v, obj) }
-
-      obj.type = props.delete('type')
-      load_context(@context, obj)
-      obj.properties = props
-      obj._parent = parent if parent
-
-      obj._unsupported_properties = unsupported_properties(klass, props)
-      obj
     end
 
     def unsupported_properties(klass, props)

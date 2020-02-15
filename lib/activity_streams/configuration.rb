@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'singleton'
+
 module ActivityStreams
   def self.config
     @config ||= Configuration.instance
@@ -10,7 +12,7 @@ module ActivityStreams
   end
 
   class Configuration
-    include Singleton
+    include ::Singleton
 
     attr_accessor :accessor_methods
   end

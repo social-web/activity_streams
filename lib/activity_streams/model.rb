@@ -11,7 +11,7 @@ module ActivityStreams
 
   def self.new(**props)
     if props[:type]
-      types[props[:type]].new(**props)
+      types_registry[props[:type]].new(**props)
     else
       self.object(**props)
     end
@@ -21,12 +21,12 @@ module ActivityStreams
     contexts[ctx] = mod
   end
 
-  def self.types
+  def self.types_registry
     @types ||= {}
   end
 
   def self.register_type(type, klass)
-    types[type.to_s] = klass
+    types_registry[type.to_s] = klass
 
     method_name = type.to_s.gsub(/([A-Za-z\d]+)([A-Z][a-z])/,'\1_\2').downcase
     define_singleton_method method_name do |**props, &blk|
@@ -61,7 +61,7 @@ module ActivityStreams
       self.merge_properties(props) if props
 
       unless properties[:type]
-        properties[:type] = ActivityStreams.types.invert[self.class]
+        properties[:type] = ActivityStreams.types_registry.invert[self.class]
       end
 
     end
@@ -113,7 +113,7 @@ module ActivityStreams
     def _parent=(v)
       self.instance_eval('undef :context=') if respond_to?(:context=)
       remove_instance_variable(:@context) if @context
-      properties.delete[:@context]
+      properties.delete(:@context)
       _unsupported_properties.delete('@context')
       @_parent = v
     end

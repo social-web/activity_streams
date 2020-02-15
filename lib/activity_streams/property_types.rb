@@ -13,6 +13,12 @@ module ActivityStreams
       end
     end
 
+    class Boolean
+      def self.===(other)
+        other == TrueClass || other == FalseClass
+      end
+    end
+
     class DateTime
       def self.===(other)
         other == self ||

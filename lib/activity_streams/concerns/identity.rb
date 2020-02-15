@@ -25,7 +25,7 @@ module ActivityStreams
       end
 
       def is_a?(klass)
-        their_type = ActivityStreams.types.invert[klass]
+        their_type = ActivityStreams.types_registry.invert[klass]
         [their_type, type, ActivityStreams, ActivityStreams::Object].include?(klass)
       end
     end

@@ -2,6 +2,5 @@
 
 require 'bundler/setup'
 require 'activity_streams'
-require "irb"
 
-IRB.start(__FILE__)
+binding.irb

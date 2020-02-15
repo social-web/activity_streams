@@ -2,8 +2,9 @@
 
 require 'bundler/setup'
 
-require 'http'
 require 'json'
+require 'json/ld'
+require 'securerandom'
 
 require 'activity_streams/configuration'
 require 'activity_streams/errors'
