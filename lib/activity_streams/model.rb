@@ -47,24 +47,23 @@ module ActivityStreams
     include Concerns::Properties
     include Concerns::Serialization
 
-    property :id
-    property :type
+    property :@context, type: PropertyTypes::Any
+    property :id, type: PropertyTypes::IRI
+    property :type, type: PropertyTypes::Any
 
     attr_accessor :_original_json
     attr_accessor :_parent
 
     def initialize(**props)
-      self.context = 'https://www.w3.org/ns/activitystreams'
+      self[:@context] = 'https://www.w3.org/ns/activitystreams'
 
       self[:id] = self[:type] = nil
-
-      if props
-        props.each { |k, v| self[k] = v }
-      end
+      self.merge_properties(props) if props
 
       unless properties[:type]
         properties[:type] = ActivityStreams.types.invert[self.class]
       end
+
     end
 
     def compress
@@ -82,44 +81,39 @@ module ActivityStreams
 
     def context(arg = nil)
       if arg
-        @context = arg
+        self[:@context] = arg
       else
-        _parent&.context || @context
+        _parent&[:@contact] || self[:@context]
       end
     end
 
     def context=(ctx)
       unless _parent
-        new_ctx = case @context
-        when NilClass then @context = ctx
-        when Array
-          case ctx
-          when Array then @context | ctx
-          when String then Array.new(@context) << ctx
-          end
-        when String
-          case ctx
-          when Array then ctx << @context
-          when String then [@context, ctx]
+        case self[:@context]
+        when NilClass then self[:@context] = ctx
+        when Array then self[:@context] |= ctx
+        when String then self[:@context] += Array(self[:@context]) + Array(ctx)
+        end
+
+        self[:@context].tap do |ctx_prop|
+          if ctx_prop.is_a?(Array)
+            ctx_prop.uniq!
+            ctx_prop.compact!
+            ctx_prop.each { |ctx| _load_extension(ctx) }
+            ctx_prop.one? ? ctx_prop.first : ctx_prop
+          else
+            _load_extension(ctx_prop)
           end
         end
 
-        @context = case new_ctx
-        when Array
-          new_ctx.uniq!
-          new_ctx.compact!
-          new_ctx.each { |ctx| _load_extension(ctx) }
-          new_ctx.one? ? new_ctx.first : new_ctx
-        else
-          _load_extension(ctx)
-          new_ctx
-        end
+        self[:@context]
       end
     end
 
     def _parent=(v)
       self.instance_eval('undef :context=') if respond_to?(:context=)
       remove_instance_variable(:@context) if @context
+      properties.delete[:@context]
       _unsupported_properties.delete('@context')
       @_parent = v
     end

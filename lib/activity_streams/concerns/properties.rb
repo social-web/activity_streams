@@ -72,12 +72,16 @@ module ActivityStreams
         @errors ||= []
       end
 
+      def merge_properties(props)
+        @properties.merge!(props.transform_keys { |k| k.to_sym })
+      end
+
       def properties
         @properties ||= {}
       end
 
       def properties=(props)
-        props.each { |k, v| self[k] = v }
+        @properties = props.transform_keys { |k| k.to_sym }
       end
 
       # Traverse this object's properties, breadth-first to the given `depth`.

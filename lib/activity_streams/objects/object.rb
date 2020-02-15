@@ -21,10 +21,10 @@ module ActivityStreams
       to
     ].each(&method(:property))
 
-    property :published, type: PropertyTypes::Params::Time
-    property :startTime, type: PropertyTypes::Params::Time
-    property :endTime, type: PropertyTypes::Params::Time
-    property :updated, type: PropertyTypes::Params::Time
+    property :published, type: PropertyTypes::DateTime
+    property :startTime, type: PropertyTypes::DateTime
+    property :endTime, type: PropertyTypes::DateTime
+    property :updated, type: PropertyTypes::DateTime
   end
 end
 
