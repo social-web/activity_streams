@@ -22,7 +22,7 @@ module ActivityStreams
     end
 
     def generate_random(props = {})
-      model = types[props[:type]] || types.values.sample
+      model = types_registry[props[:type]] || types_registry.values.sample
       properties = model.properties.select { |k, v| !%i[@context type].include?(k) }
       instance = model.new
       properties.each do |prop, type|
