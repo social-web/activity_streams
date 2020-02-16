@@ -75,7 +75,7 @@ module ActivityStreams
       end
 
       def merge_properties(props)
-        @properties.merge!(props.transform_keys { |k| k.to_sym })
+        props.each { |k, v| self[k] = v }
       end
 
       def properties
