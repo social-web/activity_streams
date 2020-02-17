@@ -81,8 +81,10 @@ module ActivityStreams
         @properties ||= {}
       end
 
+      # Replace properties
       def properties=(props)
-        @properties = props.transform_keys { |k| k.to_sym }
+        properties.clear
+        props.each { |k, v| self[k] = v }
       end
 
       # Traverse this object's properties, breadth-first to the given `depth`.
