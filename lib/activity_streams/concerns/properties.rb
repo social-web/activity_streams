@@ -66,7 +66,6 @@ module ActivityStreams
 
       def []=(prop, val)
         return unless self.class.properties.key?(prop.to_sym)
-
         properties[prop.to_sym] = val
       end
 
