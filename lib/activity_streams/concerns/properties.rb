@@ -92,10 +92,9 @@ module ActivityStreams
       # to visit each relationship. The block must return a dereferenced child.
       def traverse_properties(props = self.class.properties.keys, depth: Float::INFINITY)
         ActivityStreams::Utilities::Queue.new.call(self, depth: depth) do |obj|
-          props.each do |prop|
-            queued_up = []
-            next unless obj.is_a?(ActivityStreams)
+          next unless obj.is_a?(ActivityStreams)
 
+          props.each do |prop|
             child = obj[prop]
 
             if block_given?
