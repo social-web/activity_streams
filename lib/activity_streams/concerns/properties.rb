@@ -90,7 +90,7 @@ module ActivityStreams
       # Traverse this object's properties, breadth-first to the given `depth`.
       # A block will be yieled a hash of the `parent`, `child`, and `property`
       # to visit each relationship. The block must return a dereferenced child.
-      def traverse_properties(props = properties.keys, depth: Float::INFINITY)
+      def traverse_properties(props = self.class.properties.keys, depth: Float::INFINITY)
         ActivityStreams::Utilities::Queue.new.call(self, depth: depth) do |obj|
           props.each do |prop|
             queued_up = []
