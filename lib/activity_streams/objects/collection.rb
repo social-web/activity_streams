@@ -16,13 +16,10 @@ module ActivityStreams
     end
 
     def traverse_items(depth: Float::INFINITY)
-      loop_count = 0
-      queue = self[:items] || []
       items = []
       visited_collections = Set.new
 
-      while !queue.empty? && loop_count <= 20
-        collection = queue.shift
+      ActivityStreams::Utilities::Queue.new.call(self) do |collection|
         break if visited_collections.include?(collection)
 
         collection = yield(collection) if block_given?
@@ -31,13 +28,9 @@ module ActivityStreams
 
         case collection[:type]
         when 'Collection', 'OrderedCollection'
-          if first = collection[:first]
-            queue << first
-          end
+          queue << first if first = collection[:first]
         when 'CollectionPage', 'OrderedCollectionPage'
-          if nxt = collection[:next]
-            queue << nxt
-          end
+          queue << nxt if nxt = collection[:next]
         end
 
         items += Array(collection[:items])
