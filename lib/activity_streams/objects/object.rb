@@ -25,6 +25,14 @@ module ActivityStreams
     property :startTime, type: PropertyTypes::DateTime
     property :endTime, type: PropertyTypes::DateTime
     property :updated, type: PropertyTypes::DateTime
+
+    def is_a?(klass)
+      if klass == ActivityStreams::Object
+        self.class.ancestors.include?(klass)
+      else
+        super
+      end
+    end
   end
 end
 

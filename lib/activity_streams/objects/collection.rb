@@ -7,6 +7,14 @@ module ActivityStreams
     ActivityStreams.register_type('Collection', self)
     %i[current first items last totalItems].each(&method(:property))
 
+    def is_a?(klass)
+      if klass == ActivityStreams::Collection
+        self.class.ancestors.include?(klass)
+      else
+        super
+      end
+    end
+
     def traverse_items(depth: Float::INFINITY)
       loop_count = 0
       queue = self[:items] || []

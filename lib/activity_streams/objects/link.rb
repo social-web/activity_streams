@@ -13,5 +13,13 @@ module ActivityStreams
       width
       preview
     ].each(&method(:property))
+
+    def is_a?(klass)
+      if klass == ActivityStreams::Link
+        self.class.ancestors.include?(klass)
+      else
+        super
+      end
+    end
   end
 end
