@@ -22,18 +22,26 @@ module ActivityStreams
       ActivityStreams::Utilities::Queue.new.call(self, depth: depth) do |collection|
         break if visited_collections.include?(collection)
 
+        queued_up = []
+
         collection = yield(collection) if block_given?
 
         visited_collections << collection[:id]
 
         case collection[:type]
         when 'Collection', 'OrderedCollection'
-          queue << first if first = collection[:first]
+          if first = collection[:first]
+            queued_up << first
+          end
         when 'CollectionPage', 'OrderedCollectionPage'
-          queue << nxt if nxt = collection[:next]
+          if nxt = collection[:next]
+            queued_up << nxt
+          end
         end
 
         items += Array(collection[:items])
+
+        queued_up
       end
 
       items
