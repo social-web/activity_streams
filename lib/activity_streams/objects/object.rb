@@ -19,7 +19,7 @@ module ActivityStreams
       tag
       url
       to
-    ].each(&method(:property))
+    ].each { |prop| property prop }
 
     property :published, type: PropertyTypes::DateTime
     property :startTime, type: PropertyTypes::DateTime
