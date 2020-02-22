@@ -17,6 +17,10 @@ module ActivityStreams
   NAMESPACE = 'https://www.w3.org/ns/activitystreams'
 
   class << self
+    def ===(obj)
+      obj.is_a?(ActivityStreams)
+    end
+
     def from_json(json)
       Factory.new(json).build
     end
