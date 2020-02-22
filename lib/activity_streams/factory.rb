@@ -39,7 +39,7 @@ module ActivityStreams
           when Hash
             queued_up << child = build_model(v)
             o[prop] = child
-            child._parent = o
+            child._parent = o if child.is_a?(ActivityStreams)
           end
         end
 
