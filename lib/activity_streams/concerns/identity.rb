@@ -4,10 +4,10 @@ module ActivityStreams
   module Concerns
     module Identity
       def ==(obj)
-        case obj
-        when ActivityStreams::Model then obj[:id] == self[:id]
-        when Hash then obj[:id] == self[:id]
-        else false
+        if obj.is_a?(ActivityStreams)
+          obj[:id] == self[:id]
+        else
+          false
         end
       end
 
