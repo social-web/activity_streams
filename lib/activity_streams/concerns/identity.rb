@@ -10,6 +10,7 @@ module ActivityStreams
           false
         end
       end
+      alias_method :===, :==
 
       def inspect
         props = properties.map do |prop, val|
