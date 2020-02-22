@@ -13,7 +13,7 @@ module ActivityStreams
       alias_method :===, :==
 
       def inspect
-        props = properties.map do |prop, val|
+        props = properties.select { |k, _v| !%i[@context id type].include?(k) }.map do |prop, val|
           prop = %(@#{prop})
           val = val.is_a?(ActivityStreams::Object) ?
             %(#<ActivityStreams::#{val[:type]} @id="#{val[:id]}">) :
@@ -22,7 +22,7 @@ module ActivityStreams
           %(#{prop}=#{val.inspect || 'nil'})
         end
 
-        %(#<ActivityStreams:#{self[:type]} #{props.join(' ')}>)
+        %(#<ActivityStreams::#{self[:type]} @context=#{self[:@context]} @id=#{self[:id] || 'nil'} #{props.join(' ')}>)
       end
 
       def is_a?(klass)
