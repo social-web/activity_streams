@@ -19,7 +19,7 @@ module ActivityStreams
       items = []
       visited_collections = Set.new
 
-      ActivityStreams::Utilities::Queue.new.call(self) do |collection|
+      ActivityStreams::Utilities::Queue.new.call(self, depth: depth) do |collection|
         break if visited_collections.include?(collection)
 
         collection = yield(collection) if block_given?
