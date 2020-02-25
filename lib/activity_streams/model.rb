@@ -110,6 +110,31 @@ module ActivityStreams
       end
     end
 
+    def initialize_copy(other)
+      new_props = other.properties
+
+      Utilities::Queue.new.call(new_props) do |child|
+        queued_up = []
+
+        child.each do |k, v|
+          case v
+          when ActivityStreams
+            child_props = v.properties
+            queued_up << child_props
+            child[k] = ActivityStreams.new(**child_props)
+          when Array
+            queued_up += v.select { |vv| vv.is_a?(Hash) || vv.is_a?(ActivityStreams) }
+          when Hash then queued_up << v
+          else child[k] = v.dup
+          end
+        end
+
+        queued_up
+      end
+
+      ActivityStreams.new(**new_props)
+    end
+
     def _parent=(v)
       self.instance_eval('undef :context=') if respond_to?(:context=)
       remove_instance_variable(:@context) if @context
