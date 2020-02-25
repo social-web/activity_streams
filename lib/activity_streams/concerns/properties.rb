@@ -66,6 +66,16 @@ module ActivityStreams
 
       def []=(prop, val)
         return unless self.class.properties.key?(prop.to_sym)
+
+        case val
+        when ActivityStreams then val._parent = self
+        when Array
+          val = val.map { |child|
+            child._parent = self if child.is_a?(ActivityStreams)
+            child
+          }
+        end
+
         properties[prop.to_sym] = val
       end
 
