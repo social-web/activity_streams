@@ -86,8 +86,10 @@ module ActivityStreams
     def context(arg = nil)
       if arg
         self[:@context] = arg
+      elsif _parent
+        _parent[:@contact]
       else
-        _parent&[:@contact] || self[:@context]
+        self[:@context]
       end
     end
 
