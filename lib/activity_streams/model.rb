@@ -98,7 +98,7 @@ module ActivityStreams
         case self[:@context]
         when NilClass then self[:@context] = ctx
         when Array then self[:@context] |= ctx
-        when String then self[:@context] += Array(self[:@context]) + Array(ctx)
+        when String then self[:@context] = Array(self[:@context]) + Array(ctx)
         end
 
         self[:@context].tap do |ctx_prop|
