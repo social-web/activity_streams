@@ -5,6 +5,8 @@ Dir[File.join(__dir__, 'concerns', '*.rb')].each { |f| require f }
 Dir[File.join(__dir__, 'validators', '*.rb')].each { |f| require f }
 
 module ActivityStreams
+  CONTEXT_TYPE = 'https://www.w3.org/ns/activitystreams'
+
   def self.contexts
     @contexts ||= {}
   end
@@ -55,7 +57,7 @@ module ActivityStreams
     attr_accessor :_parent
 
     def initialize(**props)
-      self[:@context] = 'https://www.w3.org/ns/activitystreams'
+      self[:@context] = ActivityStreams::CONTEXT_TYPE
 
       self[:id] = self[:type] = nil
       self.merge_properties(props) if props
