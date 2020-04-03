@@ -70,7 +70,8 @@ module ActivityStreams
 
     def compress
       compressed_props = {}
-      self.traverse_properties(depth: 1) do |hash|
+      all_but_id = properties.keys.select { |k| k != :id }
+      self.traverse_properties(all_but_id, depth: 1) do |hash|
         parent, child, prop = hash.values_at(:parent, :child, :property)
         if child.is_a?(ActivityStreams::Object)
           compressed_props[prop] = child[:id]
@@ -78,7 +79,8 @@ module ActivityStreams
           compressed_props[prop] = child
         end
       end
-      self.class.new(**compressed_props)
+
+      self.class.new(**compressed_props.merge(id: self[:id]))
     end
 
     def context(arg = nil)
