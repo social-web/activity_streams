@@ -97,7 +97,7 @@ module ActivityStreams
       unless _parent
         case self[:@context]
         when NilClass then self[:@context] = ctx
-        when Array then self[:@context] |= ctx
+        when Array then self[:@context] | ctx
         when String then self[:@context] = Array(self[:@context]) + Array(ctx)
         end
 
