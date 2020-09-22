@@ -11,14 +11,6 @@ module ActivityStreams
       result
       target
     ].each(&method(:property))
-
-    def is_a?(klass)
-      if klass == ActivityStreams::Activity
-        self.class.ancestors.include?(klass)
-      else
-        super
-      end
-    end
   end
 end
 
