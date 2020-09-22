@@ -7,8 +7,6 @@ SimpleCov.start
 require "activity_streams"
 
 RSpec.configure do |config|
-  config.before(:all) { ActivityStreams.config.domain = 'example.org' }
-
   # Enable flags like --only-failures and --next-failure
   config.example_status_persistence_file_path = "tmp/.rspec_status"
 
