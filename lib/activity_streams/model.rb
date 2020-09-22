@@ -127,7 +127,7 @@ module ActivityStreams
           when ActivityStreams
             child_props = v.properties
             queued_up << child_props
-            child[k] = ActivityStreams.new(**child_props)
+            child[k] = ActivityStreams.from_hash(child_props)
           when Array
             queued_up += v.select { |vv| vv.is_a?(Hash) || vv.is_a?(ActivityStreams) }
           when Hash then queued_up << v

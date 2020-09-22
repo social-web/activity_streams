@@ -21,6 +21,11 @@ module ActivityStreams
       obj.is_a?(ActivityStreams)
     end
 
+    def from_hash(hash)
+      type = hash[:type]
+      self.types_registry[type].new(hash)
+    end
+
     def from_json(json)
       Factory.new(json).build
     end
