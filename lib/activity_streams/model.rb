@@ -116,6 +116,10 @@ module ActivityStreams
       end
     end
 
+    # Enumerate though this model's properties, duping along the way.
+    # TODO:
+    #   Determine the memory metrics for this. I guess the end result should
+    #   be equal in memory size to the oiginal.
     def initialize_copy(other)
       new_props = other.properties
 
@@ -129,7 +133,20 @@ module ActivityStreams
             queued_up << child_props
             child[k] = ActivityStreams.from_hash(child_props)
           when Array
-            queued_up += v.select { |vv| vv.is_a?(Hash) || vv.is_a?(ActivityStreams) }
+            child_props = v.each.with_object([]) do |vv, memo|
+              if vv.is_a?(Hash)
+                queued_up << vv
+                vv
+              elsif vv.is_a?(ActivityStreams)
+                child_props = vv.properties
+                queued_up << child_props
+                ActivityStreams.from_hash(child_props)
+              else
+                vv
+              end
+            end
+
+            child[k] = child_props
           when Hash then queued_up << v
           else child[k] = v.dup
           end

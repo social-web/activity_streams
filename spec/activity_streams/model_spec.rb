@@ -49,5 +49,22 @@ module ActivityStreams
         expect(act1).not_to eq(act2)
       end
     end
+
+    describe '#initialize_copy' do
+      it 'produces object equal in size to the original' do
+        require 'objspace'
+
+        act = ActivityStreams.from_hash(
+          type: 'Follow',
+          id: 'https://example.org/beep/boop',
+          replies: ActivityStreams.from_hash(type: 'Collection', items: [1, '', { type: 'Follow' }])
+        )
+        dupped_act = act.dup
+
+        expect(act.object_id).not_to eq(dupped_act.object_id)
+        expect(ObjectSpace.memsize_of(act)).
+          to eq(ObjectSpace.memsize_of(dupped_act))
+      end
+    end
   end
 end
