@@ -7,16 +7,18 @@ module ActivityStreams
     ActivityStreams.register_type('Collection', self)
     %i[current first items last totalItems].each(&method(:property))
 
-    def traverse_items(depth: Float::INFINITY)
+    def traverse_items(depth: Float::INFINITY, &visitor)
       items = []
       visited_collections = Set.new
 
       ActivityStreams::Utilities::Queue.new.call(self, depth: depth) do |collection|
-        break if visited_collections.include?(collection)
+        break unless collection
+        break if visited_collections.include?(collection[:id])
 
         queued_up = []
 
-        collection = yield(collection) if block_given?
+        collection = visitor.call(collection) if visitor
+        break unless collection
 
         visited_collections << collection[:id]
 
