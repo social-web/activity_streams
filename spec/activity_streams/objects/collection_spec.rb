@@ -5,7 +5,7 @@ require 'spec_helper'
 module ActivityStreams
   module Objects
     RSpec.describe Collection do
-      describe '#traverse_items' do
+      describe '#traverse_pages' do
         it 'returns an array of nested items' do
           item1 = ActivityStreams.generate_random
           item2 = ActivityStreams.generate_random
@@ -24,7 +24,7 @@ module ActivityStreams
 
           collection[:first] = first_collection
 
-          expect(collection.traverse_items).to eq([item1, item2, item3, item4])
+          expect(collection.traverse_pages).to eq([item1, item2, item3, item4])
         end
 
         it 'visits each nested collection' do
@@ -39,7 +39,7 @@ module ActivityStreams
 
           expect { |probe|
             i = 0
-            collection.traverse_items do |collection|
+            collection.traverse_pages do |collection|
               probe.to_proc.call(collection)
               col = collections[i]
               i += 1
