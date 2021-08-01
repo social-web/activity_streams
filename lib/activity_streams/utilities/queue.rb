@@ -9,7 +9,11 @@ module ActivityStreams
         while !queue.empty? && loop_count <= depth do
           nxt = queue.shift
           result = yield nxt
-          queue += Array(result)
+
+          # The Array() function will put `result` into an array or leave it as is if it's already an array. For a Hash,
+          # it will convert the hash to an array of an arrays of keys and values. We just want result in an array.
+          queue += result.is_a?(Hash) ? [result] : Array(result)
+
           loop_count += 1
         end
         initial
