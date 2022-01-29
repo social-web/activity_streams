@@ -56,7 +56,10 @@ module ActivityStreams
     attr_accessor :_original_json
     attr_accessor :_parent
 
-    def initialize(**props)
+    require 'activity_streams/extensions/activity_pub'
+    extend ::ActivityStreams::Extensions::ActivityPub
+
+    def initialize(props = {})
       self[:@context] = ActivityStreams::CONTEXT_TYPE
 
       self[:id] = self[:type] = nil

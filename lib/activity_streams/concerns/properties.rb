@@ -10,6 +10,10 @@ module ActivityStreams
 
       def self.included(base)
         base.class_eval do
+          if ActivityStreams.config.accessor_methods == true
+            define_method(:method_missing) { raise NoPropertyError, "The propery '#{m}' is not available on #{self}." }
+          end
+
           def self.properties
             @properties ||= begin
               ancestor_props = self.ancestors[1..].
@@ -23,9 +27,7 @@ module ActivityStreams
           def self.property(name, **options)
             name = name.to_sym
             type = options[:type] || ::ActivityStreams::PropertyTypes::Any
-            if ActivityStreams.config.accessor_methods == true
-              define_method_accessors(name)
-            end
+            define_method_accessors(name) if ActivityStreams.config.accessor_methods == true
             properties.merge!(name => type)
           end
 

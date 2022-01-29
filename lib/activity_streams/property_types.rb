@@ -48,5 +48,11 @@ module ActivityStreams
         other == ActivityStreams::Objects
       end
     end
+
+    class String
+      def self.===(other)
+        other.is_a?(String)
+      end
+    end
   end
 end

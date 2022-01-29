@@ -12,12 +12,14 @@ module ActivityStreams
       }
 
       it 'does not stop processing if attr is not recognized' do
+        ActivityStreams.config.accessor_methods = true
         expect(activity).not_to respond_to(:beep=)
         expect { activity.properties = { beep: 'boop' } }.not_to raise_error
         expect { activity.beep }.to raise_error(ActivityStreams::NoPropertyError)
       end
 
       it 'sets the parent' do
+        ActivityStreams.config.accessor_methods = true
         activity.class.property :beep
         activity.beep = ActivityStreams::Object.new
         expect(activity.beep._parent).to eq(activity)
